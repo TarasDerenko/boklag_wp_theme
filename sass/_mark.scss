@@ -1,0 +1,77 @@
+.mark-area {
+    max-width: 51px;
+    position: relative;
+}
+
+.mark-button {
+    width: 100%;
+    height: 27px;
+    padding-left: 4px;
+    background: #ffffff url('../img/mark-arrow.svg') no-repeat calc(100% - 5px) center; 
+    border: 1px solid #ececeb;
+    cursor: pointer;
+    outline: none;
+} 
+
+.mark-color, .mark-set-color {
+    display: block;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #ececeb;
+    border-radius: 50%;
+    &.white {
+        background-color: $mark-white;
+    }
+    &.orange {
+        background-color: $mark-orange;
+        border: none;
+    }
+    &.yellow {
+        background-color: $mark-yellow;
+        border: none;
+    }
+    &.red {
+        background-color: $mark-red;
+        border: none;
+    }
+    &.green {
+        background-color: $mark-green;
+        border: none;
+    }
+    &.purple {
+        background-color: $mark-purple;
+        border: none;
+    }
+    &.blue {
+        background-color: $mark-blue;
+        border: none;
+    }
+}
+
+.mark-set {
+    display: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: #ffffff;
+    border: 1px solid #ececeb;
+    border-top: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    animation: fadeIn $transition;
+    &.active {
+        display: block;
+    }
+}
+
+.mark-set-color {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+  

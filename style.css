@@ -1,0 +1,36 @@
+.popup .errors{
+	color: red;
+}
+.popup .error{
+	border-color: red;
+}
+#registration .popup-form-input{
+	position: relative;
+}
+#registration .popup-form-input:nth-child(3)::after{
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -20px;
+	height: 5px;
+	transition: width .5s;
+}
+.popup-form-input:after{
+	width: 0;
+}
+.popup-form-input.bad:after{
+	background-color: red;
+	width: 20%;
+}
+.popup-form-input.normal:after{
+	background-color: yellow;
+	width: 40%;
+}
+.popup-form-input.good:after{
+	background-color: yellow;
+	width: 65%;
+}
+.popup-form-input.strong:after{
+	background-color: green;
+	width: 100%;
+}

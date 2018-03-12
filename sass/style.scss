@@ -1,0 +1,48 @@
+@import 'fonts';
+@import 'normalize';
+@import 'magnific-popup';
+
+$helvetica: 'HelveticaNeueCyr';
+$myriad: 'Myriad Pro';
+
+$text-dark: #01162b;
+$text-white: #ffffff;
+$text-black: #000000;
+$text-blue: #2c8aea;
+$green: #8dc63f;
+$green-hover: #62a70f;
+$dark-blue: #394858;
+$light-blue: #93c5f7;
+$red: #e4342b;
+$blue: #2a89ea;
+$blue-hover: #2b7de1;
+
+$mark-white: #ffffff;
+$mark-orange: #ffa726;
+$mark-yellow: #f8d11d;
+$mark-red: #ed1c24;
+$mark-green: #8dc63f;
+$mark-purple: #a864a8;
+$mark-blue: #546fb6;
+
+$transition: 0.3s ease;
+
+
+@import 'general';
+@import 'header';
+@import 'footer';
+@import 'side-menu';
+@import 'home';
+@import 'help';
+@import 'about';
+@import 'personal';
+@import 'archive';
+@import 'delete-order';
+@import 'search';
+@import 'control';
+@import 'filter';
+@import 'reminder';
+@import 'mark';
+@import 'new-order';
+@import 'my-orders';
+@import 'popup';

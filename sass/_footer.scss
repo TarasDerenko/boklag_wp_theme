@@ -1,0 +1,131 @@
+.footer {
+    padding-top: 13px;
+    padding-bottom: 20px;
+    background-color: $dark-blue;
+}
+
+.footer-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: -15px;
+}
+
+.footer-column {
+    padding-top: 12px;
+    margin-left: 15px;
+    &:not(:first-child) {
+        padding-top: 27px;
+    }
+}
+
+.footer-title {
+    font-weight: 400;
+    font-size: 16px;
+    color: $text-white;
+    margin-top: 0;
+    margin-bottom: 22px;
+}
+
+.footer-contacts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        color: $text-white;
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+    }
+}
+
+.footer-contacts-link {
+    color: $text-white;
+    text-decoration: none;
+    span {
+        color: $light-blue;
+    }
+}
+
+.footer-social-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+}
+
+.footer-social-link {
+    display: block;
+    &:hover {
+        path {
+            fill: $light-blue;
+            opacity: 1;
+            transition: $transition;
+        }
+    }
+    path {
+        fill: #ffffff;
+        fill-rule: evenodd;
+        opacity: 0.62;
+    }
+}
+
+.footer-help-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        &:not(:last-child) {
+            margin-bottom: 6px;
+        }
+    }
+    a {
+        color: $text-white;
+        text-decoration: none;
+        transition: $transition;
+        &:hover {
+            color: $text-blue;
+            text-decoration: underline;
+        }
+    }
+}
+
+.footer-copyright {
+    font-size: 12px;
+    color: rgba($text-white, 0.6);
+}
+
+@media (max-width: 991px) {
+
+    .footer-copyright {
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .footer {
+        padding-top: 30px;
+    }
+
+    .footer-wrapper {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-left: 0;
+    }
+
+    .footer-column {
+        margin-left: 0;
+    }
+
+    .footer-copyright {
+        text-align: center;
+    }
+}

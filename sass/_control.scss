@@ -1,0 +1,13 @@
+.get-report-link {
+    font-family: $helvetica;
+    font-weight: 300;
+    font-size: 14px;
+    color: #308ceb;
+}
+
+@media (max-width: 991px) {
+
+    .get-report-link {
+        font-size: 12px;
+    }
+}

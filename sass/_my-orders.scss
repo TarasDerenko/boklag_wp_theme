@@ -1,0 +1,316 @@
+.content-table {
+    .order-info {
+        &:nth-child(4n + 2) {
+            background-color: #fafafa;
+        }
+        &:nth-child(4n) {
+            background-color: #ffffff;
+        }
+    }
+}
+
+.order-info {
+    cursor: pointer;
+}
+
+.order-info-extend {
+    display: none;
+    background-color: #ffffff;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+    animation: fadeIn $transition;
+    &> td {
+        padding: 0;
+        background-color: #ffffff;
+        text-align: left;
+    }
+    &.active {
+        display: table-row;
+    }
+}
+
+.order-detailed {
+    padding-top: 14px;
+    padding-bottom: 20px;
+    padding-left: 100px;
+    padding-right: 30px;
+    position: relative;
+}
+
+.order-detailed-close {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: #ffffff url(../img/side-menu-arrow.svg) no-repeat center;
+    border: 1px solid #8dc63f;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    transform: rotate(-90deg);
+    position: absolute;
+    top: -9px;
+    left: 55px;
+}
+
+.order-detailed-summery {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 14px;
+    position: relative;
+}
+
+.order-detailed-info {
+    width: 100%;
+    max-width: 530px;
+    padding-top: 15px;
+    padding-bottom: 40px;
+    padding-right: 5px;
+    .detailed-info-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 11px;
+    }
+    .detailed-info-label {
+        width: 37%;
+        font-family: $helvetica;
+        font-weight: 500;
+        font-size: 14px;
+        color: rgba(35, 33, 30, 0.8);
+    }
+    .detailed-info-value {
+        width: 63%;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: #3b404d;
+    }
+}
+
+.order-detailed-map {
+    flex-grow: 1;
+    min-height: 232px;
+}
+
+.executer-answers-show {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    font-family: $helvetica;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(138, 190, 68, 0.8);
+    text-decoration: underline;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    bottom: 17px;
+    left: 0;
+    .arrow {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        background: url('../img/show-answers-arrow.svg') no-repeat center;
+        margin-left: 10px;
+    }
+    &.active {
+        .arrow {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.order-detailed-answer {
+    display: none;
+    animation: fadeIn $transition;
+    &.active {
+        display: block;
+    }
+}
+
+.order-answer-table {
+    tr {
+        &:nth-child(even) {
+            background-color: #ffffff;
+        }
+    }
+    th, td {
+        border: 1px solid #ebebeb;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: rgba(35, 33, 30, 0.8);
+    }
+    th {
+        padding: 6px 23px;
+        text-align: center;
+        vertical-align: middle;
+        &:nth-child(1) {
+            width: 10%;
+            padding: 6px;
+        }
+        &:nth-child(2) {
+            width: 9%;
+            text-align: center;
+        }
+        &:nth-child(3) {
+            width: 43%;
+            text-align: left;
+        }
+        &:nth-child(4) {
+            width: 15%;
+        }
+    }
+    td {
+        padding: 8px;
+        vertical-align: middle;
+        text-align: center;
+        &:nth-child(2) {
+            text-align: center;
+        }
+    }
+    .button {
+        max-width: 122px;
+        padding: 12px 11px 11px;
+        font-weight: 300;
+        font-size: 14px;
+    }
+}
+
+.order-executer {
+    cursor: pointer;
+}
+
+.order-executer-extend {
+    display: none;
+    animation: fadeIn $transition;
+    &.active {
+        display: table-row;
+    }
+    td {
+        padding: 0;
+        border: none;
+        text-align: left;
+    }
+}
+
+.order-executer-info {
+    padding-top: 14px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+}
+
+.order-executer-message {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    form {
+        flex-grow: 1;
+    }
+}
+
+.order-executer-avatar {
+    width: 39px;
+    min-width: 39px;
+    margin-right: 14px;
+    img {
+        display: block;
+        width: 39px;
+        height: 39px;
+        border-radius: 50%;
+    }
+}
+
+.order-executer-form {
+    display: flex;
+    flex-wrap: wrap;
+    input {
+        width: 100%;
+        max-width: 354px;
+        height: 39px;
+        padding: 0 12px;
+        border: 1px solid #ebebeb;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: $text-dark;
+        outline: none;
+        margin-right: 35px;
+        &::placeholder {
+            color: #b7b7b7;
+        }
+    }
+    .button {
+        max-width: 143px;
+    }
+}
+
+.order-executer-statistic {
+    font-family: $helvetica;
+    font-weight: 300;
+    font-size: 12px;
+    color: #5b5a57;
+}
+
+.executer-statistic-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+.executer-statistic-label {
+    width: 310px;
+}
+
+@media (max-width: 1199px) {
+    
+    .order-detailed {
+        padding-left: 70px;
+    }
+
+    .order-detailed-info {
+        max-width: 500px;
+    }
+
+    .order-answer-table {
+        .button {
+            max-width: 90px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+
+    .order-detailed {
+        padding-left: 30px;
+    }
+
+    .order-detailed-info {
+        max-width: 390px;
+        .detailed-info-label {
+            font-size: 12px;
+        }
+        .detailed-info-value {
+            font-size: 12px;
+        }
+    }
+
+    .executer-answers-show {
+        font-size: 12px;
+    }
+
+    .order-answer-table {
+        th, td {
+            font-size: 12px;
+        }
+        .button {
+            max-width: 75px;
+            font-size: 12px;
+        }
+    }
+
+    .order-executer-info {
+        padding-left: 5px;
+    }
+}
+  

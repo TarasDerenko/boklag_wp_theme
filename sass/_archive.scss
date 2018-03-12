@@ -1,0 +1,148 @@
+.page-title-section {
+    margin-bottom: 80px;
+}
+
+.page-content-section {
+    position: relative;
+    &::before {
+        content: '';
+        display: block;
+        width: 733px;
+        height: 285px;
+        background: url(../img/archive-decor1.png) no-repeat right top/cover;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+    }
+    &::after {
+        content: '';
+        display: block;
+        width: 563px;
+        height: 342px;
+        background: url(../img/archive-decor2.png) no-repeat left top/cover;
+        position: absolute;
+        right: 0;
+        bottom: 80px;
+        z-index: -1;
+    }
+}
+
+.page-content {
+    min-height: 800px;
+    padding-bottom: 125px;
+    position: relative;
+}
+
+.main-content {
+    margin-left: 105px;
+}
+
+.archive-content {
+    box-shadow: 0.052px 0.999px 11.83px 1.17px rgba(99, 99, 99, 0.18);
+}
+
+.content-table {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    tr {
+        background-color: #ffffff;
+        &:nth-child(even) {
+            background-color: #fafafa;
+        }
+    }
+    th {
+        width: 20%;
+        padding: 28px 5px;
+        font-family: $helvetica;
+        font-weight: 500;
+        font-size: 19px;
+        line-height: 23px;
+        color: #3b404d;
+        vertical-align: top;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+    td {
+        padding: 28px 5px;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: #3b404d;
+        text-align: center;
+        vertical-align: top;
+        &:nth-child(2) {
+            text-align: left;
+        }
+    }
+}
+
+@media (max-width: 1199px) {
+
+    .page-title-section {
+        margin-bottom: 50px;
+    }
+
+    .content-table {
+        th {
+            font-size: 18px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+
+    .page-content-section {
+        &::before, &::after {
+            display: none;
+        }
+    }
+
+    .main-content {
+        margin-left: 75px;
+    }
+
+    .page-content {
+        min-height: 600px;
+    }
+    
+    .content-table {
+        th {
+            padding: 18px 5px;
+            font-size: 14px;
+            line-height: 16px;
+        }
+        td {
+            padding: 18px 5px;
+            font-size: 12px;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+
+    .content-table {
+        overflow-x: auto;
+        table {
+            width: 665px;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+
+    .page-title-section {
+        margin-bottom: 30px;
+    }
+
+    .main-content {
+        margin-left: 60px;
+    }
+
+    .page-content {
+        padding-bottom: 60px;
+    }
+}

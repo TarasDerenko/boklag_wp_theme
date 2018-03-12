@@ -1,0 +1,142 @@
+.reminder-area {
+    position: relative;
+}
+
+.set-reminder-button {
+    width: 17px;
+    height: 19px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    path {
+        transition: $transition;
+        fill-rule: evenodd;
+        fill: $blue;
+    }
+    &:hover {
+        path {
+            fill: $green;
+        }
+    }
+    &.active {
+        path {
+            fill: $green;
+        }
+    }
+}
+
+.reminder-table {
+    th {
+        width: 18.2%;
+        &:last-child {
+            width: 9%;
+        }
+    }
+    td {
+        &:last-child {
+            vertical-align: middle;
+        }
+    }
+}
+
+.reminder-form {
+    display: none;
+    width: 309px;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    box-shadow: 0.052px 0.999px 11.83px 1.17px rgba(99, 99, 99, 0.13);
+    position: absolute;
+    top: calc(100% + 15px);
+    right: 0;
+    z-index: 1;
+    animation: fadeIn $transition;
+    form {
+        position: relative;
+        z-index: 1;
+    }
+    .button {
+        display: block;
+        max-width: 186px;
+        padding: 12px;
+        font-weight: 300;
+        font-size: 14px;
+        margin-left: auto;
+        margin-right: 22px;
+    }
+    label {
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: rgba(59, 64, 77, 0.8);
+        margin-right: 5px;
+    }
+    input {
+        height: 39px;
+        padding: 0 8px;
+        border: 1px solid #ececeb;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: $text-dark;
+        outline: none;
+        &::placeholder {
+            color: rgba(59, 64, 77, 0.8);
+        }
+    }
+    &.active {
+        display: block;
+    }
+    &::before {
+        content: '';
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: #ffffff;
+        -webkit-box-shadow: -2px -2px 6px -2px rgba(99, 99, 99, 0.13);
+        box-shadow: -2px -2px 6px -2px rgba(99, 99, 99, 0.13);
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        top: -9px;
+        right: 36px;
+    }
+}
+
+.reminder-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.reminder-form-column {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 49%;
+}
+
+.reminder-field-date {
+    width: 100%;
+    max-width: 100px;
+}
+
+.reminder-field-time {
+    width: 100%;
+    max-width: 35px;
+}
+
+.reminder-time-dots {
+    margin: 0 5px;
+}
+
+@media (max-width: 991px) {
+
+    .reminder-form {
+        &::before {
+            right: 14px;
+        }
+    }
+}

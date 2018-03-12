@@ -1,0 +1,61 @@
+.archive-search {
+    box-shadow: 0.052px 0.999px 11.83px 1.17px rgba(99, 99, 99, 0.13);
+    margin-bottom: 27px;
+}
+
+.archive-search-wrapper {
+    position: relative;
+}
+
+.archive-search-input {
+    display: block;
+    width: 100%;
+    height: 51px;
+    padding-left: 20px;
+    padding-right: 95px;
+    background-color: #ffffff;
+    border: 1px solid #ebebeb;
+    font-family: $helvetica;
+    font-weight: 300;
+    font-size: 14px;
+    color: $text-dark;
+    outline: none;
+    &::placeholder {
+        color: #969696;
+    }
+}
+
+.archive-search-button {
+    width: 16px;
+    height: 17px;
+    padding: 0;
+    background: transparent url('../img/icon-search-loupe.svg') no-repeat center;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: calc(50% - 7px);
+    right: 40px;
+}
+ 
+@media (max-width: 991px) {
+
+    .archive-search-input {
+        padding-right: 65px;
+    }
+
+    .archive-search-button {
+        right: 25px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .archive-search-input {
+        padding-right: 45px;
+    }
+
+    .archive-search-button {
+        right: 15px;
+    }
+}

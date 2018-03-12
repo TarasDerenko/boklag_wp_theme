@@ -1,0 +1,453 @@
+.order-content {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 70px;
+    padding-right: 50px;
+    background-color: #ffffff;
+    box-shadow: 0.052px 0.999px 11.83px 1.17px rgba(99, 99, 99, 0.18);
+    input, select, textarea {
+        display: block;
+        width: 100%;
+        height: 39px;
+        padding: 8px 15px;
+        border: 1px solid #ebebeb;
+        border-radius: 5px;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: $text-dark;
+        outline: none;
+        &::placeholder {
+            color: rgba(59, 64, 77, 0.8);
+        }
+    }
+    textarea {
+        height: 105px;
+        padding-top: 15px;
+        resize: none;
+    }
+    label {
+        display: block;
+        font-family: $helvetica;
+        font-weight: 500;
+        font-size: 16px;
+        color: rgba(35, 33, 30, 0.8);
+        margin-bottom: 16px;
+    }
+    select {
+        appearance: none;
+        padding-right: 35px;
+        background: url(../img/icon-select-arrow.svg) no-repeat calc(100% - 10px) center;
+    }
+} 
+
+.new-order-about {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.new-order-type, .new-order-description {
+    width: 100%;
+    max-width: 450px;
+}
+
+.new-order-time {
+    margin-bottom: 40px;
+    .order-time-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+    }
+    input, select {
+        max-width: 262px;
+    }
+    input {
+        &[type='date'] {
+            appearance: none;
+            background: url(../img/icon-calendar.png) no-repeat calc(100% - 13px) center;
+            &::-webkit-inner-spin-button {
+                display: none;
+            }
+        }
+    }
+    .button {
+        max-width: 214px;
+        padding: 12px 12px 11px;
+        font-weight: 300;
+        font-size: 14px;
+        margin-left: 50px;
+    }
+}
+
+.new-order-diagram {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ebebeb;
+    margin-bottom: 36px;
+}
+
+.diagram-list {
+    display: flex;
+    justify-content: space-between;
+}
+
+.diagram-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 72px;
+    position: relative;
+}
+
+.diagram-value {
+    height: 50px;
+    background-color: #ebebeb;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    &.blue {
+        background-color: #88c3ff;
+    }
+    &.red {
+        background-color: #ed1c24;
+    }
+}
+
+.diagram-day {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.diagram-cost {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.diagram-day, .diagram-cost {
+    font-family: $helvetica;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(52, 52, 52, 0.68);
+    text-align: center;
+}
+
+.new-order-location {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.order-location-form {
+    width: 48%;
+    max-width: 450px;
+}
+
+.location-form-row {
+    margin-bottom: 25px;
+}
+
+.location-street-house {
+    display: flex;
+    flex-wrap: wrap;
+    .location-street {
+        flex-grow: 1;
+        margin-right: 30px;
+    }
+    .location-house {
+        width: 104px;
+    }
+}
+
+.order-location-map {
+    width: 51%;
+    max-width: 485px;
+    position: relative;
+    .location-map-input {
+        max-width: 216px;
+        height: 32px;
+        padding-left: 35px;
+        background: #ffffff url('../img/map-marker-plus.png') no-repeat 10px center;
+        border: none;
+        position: absolute;
+        top: 10px;
+        right: 9px;
+    }
+}
+
+.location-map {
+    height: 100%;
+    width: 100%;
+}
+
+.new-order-documents {
+    margin-bottom: 50px;
+    .documents-title {
+        font-family: $helvetica;
+        font-weight: 500;
+        font-size: 16px;
+        color: rgba(35, 33, 30, 0.8);
+        margin-top: 0;
+    }
+    .documents-list {
+        list-style-type: none;
+        padding-left: 18px;
+        margin-top: 0;
+        margin-bottom: 25px;
+        li {
+            font-family: $helvetica;
+            font-weight: 300;
+            font-size: 14px;
+            color: #3b404d;
+            margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+            &::before {
+                content: '- ';
+            }
+        }
+    }
+}
+
+.documents-attach {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    .documents-attach-button {
+        max-width: 214px;
+        padding: 12px 12px 11px;
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 14px;
+        color: #f4f4f4;
+        margin-left: 35px;
+        margin-right: 50px;
+        margin-bottom: 0;
+        input {
+            display: none;
+        }
+    }
+    .attach-button-description {
+        font-family: $helvetica;
+        font-weight: 300;
+        font-size: 12px;
+        color: rgba(93, 93, 93, 0.68);
+    }
+}
+
+.new-order-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.new-order-cancel {
+    max-width: 248px;
+    margin-left: 30px;
+}
+
+.new-order-submit {
+    margin-right: 30px;
+}
+
+@media (max-width: 1199px) {
+
+    .new-order-type, .new-order-description {
+        width: 49%;
+    }
+
+    .diagram-item {
+        width: 60px;
+    }
+
+    .diagram-day, .diagram-cost {
+        font-size: 12px;
+    }
+
+    .order-location-form, .order-location-map {
+        width: 49%;
+    }
+}
+
+@media (max-width: 991px) {
+
+    .order-content {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .location-street-house {
+        flex-direction: column;
+        .location-street {
+            margin-right: 0;
+            margin-bottom: 25px;
+        }
+        .location-house {
+            width: 100%;
+        }
+    }
+
+    .order-location-map {
+        .location-map-input {
+            max-width: 55%;
+        }
+    }
+
+    .new-order-cancel {
+        max-width: 180px;
+    }
+
+    .new-order-submit {
+        max-width: 300px;
+    }
+
+    .new-order-diagram {
+        padding-bottom: 30px;
+    }
+
+    .diagram-item {
+        width: 8%;
+    }
+
+    .diagram-day, .diagram-cost {
+        transform: rotate(-90deg);
+    }
+
+    .diagram-value {
+        margin-bottom: 50px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .new-order-about {
+        flex-direction: column;
+    }
+
+    .new-order-type, .new-order-description {
+        width: 100%;
+    }
+
+    .new-order-type {
+        margin-bottom: 20px;
+    }
+
+    .new-order-time {
+        .order-time-row {
+            flex-direction: column;
+        }
+        input {
+            &[type='date'] {
+                margin-bottom: 30px;
+            }
+        }
+        .button {
+            margin-left: 17px;
+        }
+    }
+
+    .new-order-location {
+        flex-direction: column;
+    }
+
+    .order-location-form, .order-location-map {
+        width: 100%;
+    }
+
+    .location-map {
+        height: 300px;
+    }
+
+    .documents-attach {
+        flex-direction: column;
+        align-items: flex-start;
+        .documents-attach-button {
+            margin-bottom: 15px;
+        }
+        .attach-button-description {
+            margin-left: 20px;
+        }
+    }
+
+    .new-order-cancel, .new-order-submit {
+        max-width: 170px;
+        padding: 10px 5px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .order-content {
+        padding: 30px 15px;
+        label {
+            margin-bottom: 10px;
+        }
+    }
+
+    .new-order-time {
+        .button {
+            max-width: 170px;
+            margin: 0 auto;
+        }
+    }
+
+    .new-order-about {
+        margin-bottom: 30px;
+    }
+
+    .new-order-time {
+        margin-bottom: 30px;
+    }
+
+    .new-order-diagram {
+        display: none;
+    }
+
+    .location-form-row {
+        margin-bottom: 15px;
+    }
+
+    .new-order-documents {
+        margin-bottom: 30px;
+        .documents-list {
+            padding-left: 0;
+        }
+    }
+
+    .documents-attach {
+        .documents-attach-button {
+            max-width: 170px;
+            padding: 10px;
+            margin-left: 15px;
+            margin-right: 0;
+        }
+        .attach-button-description {
+            margin-left: 0;
+        }
+    }
+
+    .new-order-cancel {
+        margin-left: 15px;
+        margin-bottom: 15px;
+    }
+
+    .new-order-submit {
+        margin-left: 15px;
+        margin-right: 0;
+    }
+
+    .order-location-map {
+        .location-map-input {
+            max-width: 90%;
+            top: 50px;
+            left: 10px;
+            right: auto;
+        }
+    }
+}

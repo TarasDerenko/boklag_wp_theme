@@ -1,0 +1,57 @@
+.delete-table {
+    th {
+        width: 18.2%;
+        &:last-child {
+            width: 9%;
+        }
+    }
+    td {
+        &:last-child {
+            vertical-align: middle;
+        }
+    }
+    .custom-checkbox {
+        margin-left: 20px;
+    }
+}
+
+.content-table-buttons {
+    padding-top: 53px;
+    padding-bottom: 43px;
+    padding-right: 50px;
+    background-color: #ffffff;
+    text-align: right;
+    .button {
+        max-width: 174px;
+        padding: 12px;
+        font-weight: 300;
+        font-size: 14px;
+        &:first-child {
+            margin-right: 30px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+
+    .delete-table {
+        .custom-checkbox {
+            margin-left: 10px;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+
+    .content-table-buttons {
+        padding: 30px 15px;
+        .button {
+            display: block;
+            margin: 0 auto;
+            &:first-child {
+                margin-right: auto;
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
