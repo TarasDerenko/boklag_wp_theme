@@ -14,7 +14,8 @@ function toggleMenu() {
 var locationCloseButton = document.querySelector('.location-close');
 var locationContainer = document.querySelector('.location');
 
-locationCloseButton.addEventListener('click', closeLocation);
+if(locationCloseButton)
+    locationCloseButton.addEventListener('click', closeLocation);
 
 function closeLocation() {
     locationContainer.classList.remove('active');
@@ -339,7 +340,6 @@ function extendExecutorInfo() {
 
 
 $(document).ready(function() {
-
     // Magnific popups
     $('[href="#login"], [href="#registration"], [href="#wallet"]').magnificPopup({
         type: 'inline'

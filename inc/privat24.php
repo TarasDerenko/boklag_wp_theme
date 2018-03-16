@@ -79,16 +79,16 @@ class PrivatPay
 
 	public function sendRequest(){
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_HTTPHEADER,  array('Content-Type: text/xml'));
-        curl_setopt($ch, CURLOPT_URL, self::REQUEST_URL);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-    	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_createXml());
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
+    curl_setopt($ch, CURLOPT_HTTPHEADER,  array('Content-Type: text/xml'));
+    curl_setopt($ch, CURLOPT_URL, self::REQUEST_URL);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $this->_createXml());
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $data;
 	}
 }
 

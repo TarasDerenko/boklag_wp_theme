@@ -65,24 +65,130 @@ function myCreateElement(tag,attr,child){
 	return el;
 }
 /******************************************************/
-function onSignIn(googleUser) {
-   var profile = googleUser.getBasicProfile();
-   var token = googleUser.getAuthResponse().id_token;
-       $.ajax({
-           method: 'post',
-           url: wp_ajax.url,
-           data: {
-           	   action:'google_login',
-               id: profile.getId(),
-               name: profile.getName(),
-               email: profile.getEmail(),
-               image: profile.getImageUrl(),
-               token: token
-           },
-           success: function(msg){
-               window.location.href = "/";
-           },
-           error: function(){
-           }
-       })
+var auth2;
+function gInit() {
+    gapi.load('auth2', function(){
+        auth2 =  gapi.auth2.init({
+            client_id: '784347025730-uct0opjdbesr2rb1pcgdc12c4i7a9uit.apps.googleusercontent.com'
+        });
+    });
 }
+$('.popup-captcha-google').click(function(){
+    auth2.signIn({
+        scope: 'profile email'
+    }).then(function (googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+            method: 'post',
+            url: wp_ajax.url,
+            data: {
+                action:'google_login',
+                id: profile.getId(),
+                name: profile.getName(),
+                email: profile.getEmail(),
+                image: profile.getImageUrl(),
+                token: token
+            },
+            success: function(msg){
+                window.location.href = "/";
+            },
+            error: function(){
+            }
+        })
+    });
+});
+
+$('.select-city').on('change','input, select',function(){
+	$(this).closest('form').submit();
+});
+
+$('.order-pagination').on('click','a',function(){
+	var paged = $(this).attr('data-paged');
+	var table = $('.content-table');
+	var type = table.attr('data-type');
+	var mark = table.attr('data-mark');
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'ajax_bl_orders',
+			paged:paged,
+			type:type,
+			mark:mark
+		},
+		success:function(data){
+			var tr,td,label,
+				block = $('.content-table tbody');
+			block.empty();
+			data = JSON.parse(data);
+			$('.order-pagination').html(data.pag);
+
+			for(var i = 0; i < data.orders.length; i++){
+				tr = myCreateElement('tr',{'data-order':data.orders[i].id});
+                tr.appendChild(myCreateElement('td',{},data.orders[i].id));
+                tr.appendChild(myCreateElement('td',{},data.orders[i].title));
+                tr.appendChild(myCreateElement('td',{},data.orders[i].status));
+                tr.appendChild(myCreateElement('td',{},data.orders[i].address));
+                tr.appendChild(myCreateElement('td',{},data.orders[i].date_end));
+                if(table.hasClass('delete-table')){
+                    td = myCreateElement('td');
+                    label = myCreateElement('label',{class:'custom-checkbox'});
+                    label.appendChild(myCreateElement('input',{type:'checkbox',value:data.orders[i].id}));
+                    label.appendChild(myCreateElement('div',{class:'custom-checkbox-image2'}));
+                    td.appendChild(label);
+                    tr.appendChild(td);
+                }
+                if(table.hasClass('reminder-table')){
+                    td = myCreateElement('td',{},data.bell);
+                    tr.appendChild(td);
+                }
+                block.append(tr);
+            }
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            var reminderButttons = document.querySelectorAll('.set-reminder-button');
+
+            if (reminderButttons) {
+                reminderButttons.forEach(function(button) {
+                    button.addEventListener('click', setReminder);
+                });
+            }
+		}
+	});
+});
+
+function myCreateElement(tag,attr,text){
+	var el = document.createElement(tag);
+	if(attr){
+		for(var prop in attr)
+			el.setAttribute(prop,attr[prop]);
+	}
+	if(text)
+		el.innerHTML = text;
+	return el;
+}
+
+
+$('tbody').on('click','.button-invert',function(){
+	var tr = $(this).closest('tr');
+	var order_id = tr.attr('data-order');
+	var date = tr.find('.reminder-field-date').val();
+	var hour = tr.find('.reminder-field-hour').val();
+	var min = tr.find('.reminder-field-min').val();
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'set_order_reminder',
+			id:order_id,
+			date:date,
+			hour:hour,
+			min:min
+		},
+		success:function(data){
+			console.log(data);
+		}
+	});
+	return false;
+});
+

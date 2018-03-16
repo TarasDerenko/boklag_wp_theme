@@ -1,11 +1,12 @@
 <?php get_header(); ?>
     <main class="main">
+        <?php if(have_posts()):the_post();?>
         <section class="showcase">
             <div class="showcase-cover"></div>
             <div class="container">
                 <div class="showcase-content">
-                    <h1 class="showcase-title">Узнай как быстро мы сможем выполнить Ваш заказ прямо сейчас</h1>
-                    <a href="#" class="button"><span>Узнать</span></a>
+                    <h1 class="showcase-title"><?php the_field('top_content')?></h1>
+                    <a href="<?php the_field('top_button_url')?>" class="button"><span><?php the_field('tom_button_text')?></span></a>
                 </div>
             </div>
         </section>
@@ -47,12 +48,12 @@
                     <h2 class="section-title">Как это работает</h2>
                 </div>
             </div>
-            <video class="video-track" src="<?php bloginfo('template_url')?>/img/output.mp4" controls></video>
+            <video class="video-track" src="<?php the_field('how_this_work_video')?>" controls></video>
         </section>
         <section class="order-service">
             <div class="container">
-                <h2 class="section-title left-decor">Закажи услугу прямо сейчас!</h2>
-                <a href="#" class="button"><span>Заказать услугу</span></a>
+                <h2 class="section-title left-decor"><?php the_field('service_title')?></h2>
+                <a href="<?php the_field('service_buttom_url')?>" class="button"><span><?php the_field('service_buttom_text')?></span></a>
             </div>
         </section>
         <section class="features">
@@ -128,7 +129,7 @@
                     <h2 class="section-title">Услуги "ФОП Боклаг"</h2>
                 </div>
             </div>
-            <video class="video-track" src="<?php bloginfo('template_url')?>/img/output.mp4" controls></video>
+            <video class="video-track" src="<?php the_field('services_video')?>" controls></video>
         </section>
         <section class="share">
             <div class="container">
@@ -138,46 +139,7 @@
         </section>
         <section class="calculator">
             <div class="container">
-                <h2 class="section-title">Калькулятор стоимости услуги</h2>
-                <form>
-                    <div class="calculator-form-wrapper">
-                        <div class="calculator-form">
-                            <div class="calculator-form-row">
-                                <label for="">Имя: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">E-mail: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Вид услуг: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Площадь м<sup>2</sup>: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Местоположение: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Район: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Населенный пункт: *</label>
-                                <input type="text">
-                            </div>
-                            <div class="calculator-form-row">
-                                <label for="">Комментарий: *</label>
-                                <textarea></textarea>
-                            </div>
-                            <button type="submit" class="button"><span>Рассчитать</span></button>
-                        </div>
-                    </div>
-                </form>
+                  <?php echo do_shortcode('[contact-form-7 id="123" title="Контактная форма Кадькулятор"]')?>
             </div>
         </section>
         <section class="callback">
@@ -227,5 +189,6 @@
                 </form>
             </div>
         </section>
+        <?php endif;?>
     </main>
 <?php get_footer();?>

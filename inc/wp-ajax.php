@@ -1,8 +1,15 @@
 <?php
 add_action('wp_ajax_show_news_more', 'show_news_more');
 add_action('wp_ajax_nopriv_show_news_more', 'show_news_more');
+
 add_action('wp_ajax_google_login', 'sign_on_from_google');
 add_action('wp_ajax_nopriv_google_login', 'sign_on_from_google');
+
+add_action('wp_ajax_ajax_bl_orders', 'get_ajax_bl_orders');
+add_action('wp_ajax_ajax_bl_orders', 'get_ajax_bl_orderse');
+
+add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
+add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
 
 function show_news_more(){
   $result = array();
@@ -56,4 +63,25 @@ function sign_on_from_google(){
       }
   }
   die;
+}
+
+
+function get_ajax_bl_orders(){
+    if(isset($_POST['paged'])){
+        $type = (!empty($_POST['type'])) ? $_POST['type'] : null;
+        $mark = (!empty($_POST['mark'])) ? $_POST['mark'] : null;
+        $orders = BLOrder::find($_POST['paged'],null,$type,$mark);
+        $pagination = BLOrder::pagination($_POST['paged'],null,$type,$mark);
+        echo json_encode(array(
+            'orders' => $orders,
+            'pag' => $pagination,
+            'bell' => get_reminder_bell()
+        ));
+    }
+    die;
+}
+
+function set_bl_order_reminder(){
+    debug($_POST);
+    die;
 }

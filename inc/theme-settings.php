@@ -43,3 +43,4 @@ if ( !current_user_can( 'manage_options' ) ) {
 /*********************************************************/
 add_theme_support( 'custom-logo' );
 /*********************************************************/
+define('DEFAULT_AVATAR',get_template_directory_uri().'/img/def_avatar.png');

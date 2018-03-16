@@ -1,7 +1,7 @@
 <?php
 /* Template Name: Profile */
 ?>
-<?php get_header('profile')?>
+<?php get_header('profile');?>
 <main class="main">
     <section class="personal-content-section">
         <h1 class="section-title">Личный кабинет</h1>
@@ -10,7 +10,7 @@
                 <div class="personal-content">
                     <div class="personal-content-photo">
                         <div class="personal-photo">
-                            <img src="<?php echo wp_get_attachment_image_url(get_bl_user_data($boklag_user_meta,'user_avatar'),'full')?>" alt="">
+                            <img src="<?php echo $biklag_user_avatar; ?>" alt="">
                         </div>
                         <div class="personal-photo-buttons">
                             <label class="button-reload">
@@ -133,7 +133,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="button"><span>Изменить</span></button>
+                        <button class="button" name="edit-profile" value="edit"><span>Изменить</span></button>
                     </div>
                 </div>
             </form>

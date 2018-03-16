@@ -8,6 +8,11 @@
             <div class="popup-form-input">
                 <input type="password" placeholder="Пароль*" name="pwd">
             </div>
+            <?php if(isset($_GET['login']) && $_GET['login'] == 'failed' ):?>
+                <div class="popup-form-input errors">
+                   <span>Неправельный логин или пароль</span>
+                </div>
+            <?php endif?>
             <div class="popup-form-checkbox">
                 <label class="custom-checkbox">
                     <input type="checkbox" name="rememberme" checked>
@@ -18,7 +23,6 @@
             <div class="popup-captcha">
                 <div class="g-recaptcha" data-sitekey="6Le7iEEUAAAAAGU2NQG8UzhI8hSlBANixXM_rJsV"></div>
                 <a href="#" class="popup-captcha-google"></a>
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
             </div>
             <button type="submit" class="button"><span>Войти</span></button>
             <input type="hidden" name="redirect_to" value="<?php echo site_url(); ?>" />

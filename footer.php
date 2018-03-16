@@ -50,7 +50,7 @@
             <div class="footer-copyright">2017 &copy; Все права защищены</div>
         </div>
     </footer>
-    <?php if(is_user_logged_in()): ?>
+    <?php if(!is_user_logged_in()): ?>
        <?php get_template_part('template_parts/login','form'); ?>
        <?php get_template_part('template_parts/register','form'); ?>
     <?php endif; ?>

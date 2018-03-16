@@ -1,29 +1,123 @@
 google.maps.event.addDomListener(window, 'load', init);
+var selecting = false;
 
-function init() {
-    // Basic options for a simple Google Map
-    // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
-    var mapOptions = {
-        // How zoomed in you want the map to start at (always required)
-        zoom: 8,
-        // The latitude and longitude to center the map (always required)
-        center: new google.maps.LatLng(50.454580, 30.518430), // KYIV
-        // How you would like to style the map. 
-        // This is where you would paste any style found on Snazzy Maps.
-        styles: []
+window.onkeydown = function(e) {
+    selecting = ((e.keyIdentifier == 'Control') || (e.ctrlKey == true));
+    if(marker)
+        marker.setOptions({draggable: false});
+};
+window.onkeyup = function(e) {
+    selecting = false;
+    if(marker)
+        marker.setOptions({draggable: true});
+};
+
+var rang = 0;
+var circle = false;
+var zoom = 11;
+var inp_lat = document.getElementById('map-lat');
+var inp_lng = document.getElementById('map-lng');
+var inp_rang = document.getElementById('map-rang');
+var marker,map,positionLatLng;
+function init(){
+
+    var markerOptions = {
+        position: new google.maps.LatLng(50.454580, 30.518430),
+        draggable: true,
+        icon: wp_map.marker
+    }; var mapOptions = {
+        zoom: zoom,
+        center: new google.maps.LatLng(50.454580, 30.518430),
+        styles: [],
+        disableDoubleClickZoom: true
     };
-    // Get the HTML DOM element that will contain your map 
-    // We are using a div with id="map" seen below in the <body>
+    if(positionLatLng){
+        mapOptions.center = positionLatLng;
+        markerOptions.position = positionLatLng;
+    }
     var mapElement = document.getElementById('map');
     if (mapElement == null) {
         return;
     }
-    // Create the Google Map using our element and options defined above
-    var map = new google.maps.Map(mapElement, mapOptions);
-    // Let's also add a marker while we're at it
-    var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(50.454580, 30.518430),
-        map: map,
-        icon: '../img/map-marker.png'
+    map = new google.maps.Map(mapElement, mapOptions);
+
+    markerOptions.map = map;
+
+
+    marker = new google.maps.Marker(markerOptions);
+    inp_lat.value = marker.position.lat();
+    inp_lng.value = marker.position.lng();
+    circle = getCircle(0,marker.position,map);
+
+    map.addListener('dblclick',function (e) {
+        rang = 0;
+        marker.setMap(null);
+        marker = new google.maps.Marker({
+            position: e.latLng,
+            map: map,
+            draggable: true,
+            icon: wp_map.marker
+        });
+        inp_lat.value = marker.position.lat();
+        inp_lng.value = marker.position.lng();
+
+        if(circle)
+            circle.setMap(null);
+
+        marker.addListener('dragend',function(){
+            if(circle)
+                circle.setMap(null);
+            circle = getCircle(rang,this.position,map);
+
+            inp_lat.value = this.position.lat();
+            inp_lng.value = this.position.lng();
+        });
+
     });
+    map.addListener('dragend',function (e) {
+        map.setOptions({draggable: true});
+    });
+
+    marker.addListener('dragend',function(){
+        if(circle)
+            circle.setMap(null);
+        circle = getCircle(rang,this.position,map);
+        inp_lat.value = this.position.lat();
+        inp_lng.value = this.position.lng();
+    });
+
+    map.addListener('drag',function (e) {
+        if(selecting) {
+            map.setOptions({draggable: false});
+            if (circle)
+                circle.setMap(null);
+            rang = Math.sqrt(Math.pow((marker.position.lat() - e.latLng.lat()), 2) + Math.pow((marker.position.lng() - e.latLng.lng()), 2));
+            if (zoom < 16)
+                rang = rang * 1000 / zoom;
+            else
+                rang = rang * 100;
+            circle = getCircle(rang, marker.position, map);
+            inp_rang.value = rang;
+        }
+    });
+
+    map.addListener('zoom_changed',function (e) {
+        zoom = this.zoom;
+    });
+
+
 }
+
+function getCircle(rang,center,map) {
+    return new google.maps.Circle({
+        strokeColor: '#FF515E',
+        strokeOpacity: 0.6,
+        strokeWeight: 3,
+        fillColor: '#FF0000',
+        fillOpacity: 0.1,
+        map: map,
+        center: center,
+        radius: rang * 1000
+    })
+}
+

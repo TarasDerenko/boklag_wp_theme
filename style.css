@@ -4,6 +4,10 @@
 .popup .error{
 	border-color: red;
 }
+.popup .info{
+	color: #0088ff;
+	text-align: center;
+}
 #registration .popup-form-input{
 	position: relative;
 }
@@ -11,7 +15,7 @@
 	content: '';
 	position: absolute;
 	left: 0;
-	bottom: -20px;
+	bottom: -10px;
 	height: 5px;
 	transition: width .5s;
 }
@@ -33,4 +37,51 @@
 .popup-form-input.strong:after{
 	background-color: green;
 	width: 100%;
+}
+.calculator-form-wrapper span.wpcf7-form-control-wrap{
+	width: calc(100% - 155px);
+}
+.calculator-form-wrapper span.wpcf7-form-control-wrap input,.calculator-form-wrapper span.wpcf7-form-control-wrap textarea{
+	width: 100%;
+}
+.error-message .text-error{
+	color: red;
+}
+.error-message .text-success{
+	color: green;
+}
+.bl-pagenavi{
+	text-align: center;
+}
+.bl-pagenavi li{
+	display: block;
+	float: left;
+	background: #fff;
+	color: #000;
+}
+.bl-pagenavi ul{
+	list-style: none;
+	display: inline-block;
+}
+.bl-pagenavi li a,.bl-pagenavi li span{
+	display: block;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	border:1px solid #999;
+}
+.bl-pagenavi li a{
+	cursor: pointer;
+}
+.bl-pagenavi li.noactive{
+	background: #9dce5a;
+	color: #fff;
+}
+.personal-navigation-avatar img{
+	height: 100%;
+}
+@media (max-width: 375px) {
+	.calculator-form-wrapper span.wpcf7-form-control-wrap{
+		width: 100%;
+	}
 }
