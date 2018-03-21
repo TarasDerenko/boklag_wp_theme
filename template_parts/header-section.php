@@ -17,7 +17,7 @@ get_template_part('template_parts/location','selector');
             <div class="header-menu">
                   <?php
                     wp_nav_menu(array(
-                        'menu' => 'top-menu',
+                        'menu' => 'theme_location',
                         'container' => false,
                         'menu_class' => 'header-menu-list'
                     ));

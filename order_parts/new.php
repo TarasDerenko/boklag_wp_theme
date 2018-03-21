@@ -13,7 +13,7 @@
                 </div>
                 <div class="main-content">
                     <div class="order-content">
-                        <form method="post" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" id="order-form">
                             <div class="new-order-about">
                                 <div class="new-order-type">
                                     <label for="">Вид услуги:</label>
@@ -114,17 +114,17 @@
                                     </div>
                                     <div class="location-form-row">
                                         <label for="">Населенный пункт:</label>
-                                        <input type="text" name="settlement">
+                                        <input type="text" name="settlement" disabled>
                                     </div>
                                     <div class="location-form-row">
                                         <div class="location-street-house">
                                             <div class="location-street">
                                                 <label for="">Улица:</label>
-                                                <input type="text" name="street">
+                                                <input type="text" name="street" disabled>
                                             </div>
                                             <div class="location-house">
                                                 <label for="">Дом:</label>
-                                                <input type="text" name="house">
+                                                <input type="text" name="house" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -143,6 +143,10 @@
                                     <input type="hidden" id="map-lat" name="lat" value="0">
                                     <input type="hidden" id="map-lng" name="lng" value="0">
                                     <input type="hidden" id="map-rang" name="rang" value="0">
+                                    <input type="hidden" id="map-lat-1" name="rang" value="0">
+                                    <input type="hidden" id="map-lat-2" name="rang" value="0">
+                                    <input type="hidden" id="map-lng-1" name="lng" value="0">
+                                    <input type="hidden" id="map-lng-2" name="lng" value="0">
                                 </div>
                             </div>
                             <div class="new-order-documents">

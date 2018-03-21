@@ -25,11 +25,12 @@ function init(){
         position: new google.maps.LatLng(50.454580, 30.518430),
         draggable: true,
         icon: wp_map.marker
-    }; var mapOptions = {
+    };
+    var mapOptions = {
         zoom: zoom,
         center: new google.maps.LatLng(50.454580, 30.518430),
         styles: [],
-        disableDoubleClickZoom: true
+        disableDoubleClickZoom: false
     };
     if(positionLatLng){
         mapOptions.center = positionLatLng;
@@ -49,7 +50,7 @@ function init(){
     inp_lng.value = marker.position.lng();
     circle = getCircle(0,marker.position,map);
 
-    map.addListener('dblclick',function (e) {
+    /*map.addListener('dblclick',function (e) {
         rang = 0;
         marker.setMap(null);
         marker = new google.maps.Marker({
@@ -73,7 +74,7 @@ function init(){
             inp_lng.value = this.position.lng();
         });
 
-    });
+    });*/
     map.addListener('dragend',function (e) {
         map.setOptions({draggable: true});
     });

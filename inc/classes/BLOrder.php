@@ -120,6 +120,7 @@ class BLOrder
         return $wpdb->insert(self::TABLE_NAME,$fields);
 
     }
+
     private function get_update_fields(){
         $fields = array();
         foreach ($this as $key => $value){
@@ -252,6 +253,14 @@ class BLOrder
         $r .= join("\n", $page_links);
         $r .= $page_linksss_2.'</ul></nav>';
         return $r;
+    }
+
+    public static function delete($ids){
+        global $wpdb;
+        if(is_array($ids))
+            return $wpdb->query("DELETE FROM ".self::TABLE_NAME." WHERE id IN(".implode(',',$ids).")" );
+        return $wpdb->delete(self::TABLE_NAME,array('id' => $ids));
+
     }
 }
 

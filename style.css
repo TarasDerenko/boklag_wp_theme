@@ -80,6 +80,9 @@
 .personal-navigation-avatar img{
 	height: 100%;
 }
+.btn-file-image{
+	display: none;
+}
 @media (max-width: 375px) {
 	.calculator-form-wrapper span.wpcf7-form-control-wrap{
 		width: 100%;

@@ -31,7 +31,8 @@ function theme_name_scripts() {
 
 	wp_localize_script( 'boklag-ajax', 'wp_ajax', 
 		array(
-			'url' => admin_url('admin-ajax.php')
+			'url' => admin_url('admin-ajax.php'),
+      'user_id' => get_current_user_id()
 		)
 	); 
 }

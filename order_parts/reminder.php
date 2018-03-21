@@ -34,7 +34,7 @@
                                         <td><?php echo $order->status;?></td>
                                         <td><?php echo $order->address;?></td>
                                         <td><?php echo $order->date_end;?></td>
-                                        <td>
+                                        <td <?=(key_exists($order->id(),$reminders)) ? "class='selected' data-reminder='".date('d/m/Y H:i',strtotime($reminders[$order->id()]->remind_time))."'" : ''?>>
                                             <?php echo get_reminder_bell(); ?>
                                         </td>
                                     </tr>

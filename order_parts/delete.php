@@ -14,7 +14,7 @@
                 <?php do_action('start_orders')?>
                 <div class="main-content">
                     <div class="archive-content">
-                        <form>
+                        <form  method="post">
                             <div class="content-table delete-table">
                                 <table>
                                     <thead>
@@ -37,7 +37,7 @@
                                             <td><?php echo $order->date_end;?></td>
                                             <td>
                                                 <label class="custom-checkbox">
-                                                    <input type="checkbox" value="<?php echo $order->id();?>">
+                                                    <input type="checkbox" name="del[]" value="<?php echo $order->id();?>">
                                                     <div class="custom-checkbox-image2"></div>
                                                 </label>
                                             </td>

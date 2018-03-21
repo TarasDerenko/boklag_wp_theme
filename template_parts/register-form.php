@@ -1,4 +1,6 @@
-<?php global $error_message,$register_info; ?>
+<?php global $error_message,$register_info;
+debug($register_info);
+?>
 <div class="popup mfp-hide" id="registration">
     <?php if(sizeof($register_info)):?>
         <div class="popup-form-input info">
@@ -11,20 +13,19 @@
     <form method="post">
         <div class="popup-form">
             <div class="popup-form-input">
-                <input type="text" placeholder="Имя и Фамилия*" name="user_name" required>
+                <input type="text" placeholder="Имя и Фамилия*" name="user_name" value="<?php echo (!empty($_POST['user_name'])) ? $_POST['user_name'] : '' ?>" required>
             </div>
             <div class="popup-form-input">
-                <input type="email" placeholder="E-mail*" name="user_login" class="<?php echo (isset($error_message['email'])) ? 'error' : ''?>" required>
+                <input type="email" placeholder="E-mail*" name="user_login" value="<?php echo (!empty($_POST['user_login'])) ? $_POST['user_login'] : '' ?>" class="<?php echo (isset($error_message['email'])) ? 'error' : ''?>" required>
             </div>
             <div class="popup-form-input">
                 <input type="password" placeholder="Пароль*" name="pwd" class="<?php echo (isset($error_message['pwd'])) ? 'error' : ''?>" required>
             </div>
             <?php if(sizeof($error_message)):?>
                  <div class="popup-form-input errors">
-                    <?php foreach ($register_errors as $value) {
+                    <?php foreach ($error_message as $value) {
                         echo '<span>'.$value.'<span><br>';
                     }?>
-                    
                 </div>
             <?php endif;?>
             <div class="popup-form-checkbox">               
@@ -35,7 +36,7 @@
                 </label>
             </div>
             <div class="popup-captcha">
-                <div class="g-recaptcha" data-sitekey="6Le7iEEUAAAAAGU2NQG8UzhI8hSlBANixXM_rJsV"></div>
+                <div class="g-recaptcha" data-sitekey="6Lfnd00UAAAAAIoh-PueHNDGojXDC40lbZoiRUrW"></div>
                 <a href="#" class="popup-captcha-google"></a>
             </div>
             <input type="hidden" name="registration" value="1">

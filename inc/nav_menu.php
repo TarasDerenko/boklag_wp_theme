@@ -6,6 +6,12 @@ if ( function_exists( 'register_nav_menus' ) )
 			'top-menu'=>__('Header menu')
 		)		
 	);
+
+	register_nav_menus(
+    array(
+      'bottom-menu'=>__('Footer menu')
+    )
+  );
 }
 
 

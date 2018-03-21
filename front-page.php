@@ -111,13 +111,20 @@
         </section>
         <section class="need-implement">
             <div class="container">
-                <form>
+                <form method="post">
                     <div class="need-implement-form">
                         <label for="">Что нужно выполнить:</label>
                         <div class="input-wrapper">
-                            <input type="text" placeholder="Оформить участок">
+                            <input type="text" placeholder="Оформить участок" name="checkorder" value="<?php echo !empty($_POST['checkorder']) ? $_POST['checkorder'] : '' ?>">
                         </div>
-                        <button type="submit" class="button button-invert"><span>Отправить исполнителю</span></button>
+                        <button type="submit" class="button button-invert" name="send-mail"><span>Отправить исполнителю</span></button>
+                        <?php if(isset($mail_error) && is_array($mail_error)){ ?>
+                            <div class="popup-form-input errors">
+                                <?php foreach ($mail_error as $value) {
+                                    echo '<span>'.$value.'<span><br>';
+                                }?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </form>
             </div>

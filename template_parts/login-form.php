@@ -1,18 +1,21 @@
+<?php global $error_login,$register_info; ?>
 <div class="popup mfp-hide" id="login">
     <h2 class="popup-title">Войти в личный кабинет</h2>
-    <form action="<?php echo site_url('wp-login.php'); ?>" method="post">
+    <form method="post">
         <div class="popup-form">
             <div class="popup-form-input">
-                <input type="email" placeholder="E-mail*" name="log">
+                <input type="email" placeholder="E-mail*" name="log" value="<?php echo (!empty($_POST['log'])) ? $_POST['log'] : '' ?>">
             </div>
             <div class="popup-form-input">
                 <input type="password" placeholder="Пароль*" name="pwd">
             </div>
-            <?php if(isset($_GET['login']) && $_GET['login'] == 'failed' ):?>
+            <?php if(sizeof($error_login)):?>
                 <div class="popup-form-input errors">
-                   <span>Неправельный логин или пароль</span>
+                    <?php foreach ($error_login as $value) {
+                        echo '<span>'.$value.'<span><br>';
+                    }?>
                 </div>
-            <?php endif?>
+            <?php endif;?>
             <div class="popup-form-checkbox">
                 <label class="custom-checkbox">
                     <input type="checkbox" name="rememberme" checked>
@@ -21,11 +24,10 @@
                 </label>
             </div>
             <div class="popup-captcha">
-                <div class="g-recaptcha" data-sitekey="6Le7iEEUAAAAAGU2NQG8UzhI8hSlBANixXM_rJsV"></div>
+                <div class="g-recaptcha" data-sitekey="6Lfnd00UAAAAAIoh-PueHNDGojXDC40lbZoiRUrW"></div>
                 <a href="#" class="popup-captcha-google"></a>
             </div>
-            <button type="submit" class="button"><span>Войти</span></button>
-            <input type="hidden" name="redirect_to" value="<?php echo site_url(); ?>" />
+            <button type="submit" class="button" name="login" value="1"><span>Войти</span></button>
         </div>
         <div class="popup-footer">
             <div class="popup-footer-links">

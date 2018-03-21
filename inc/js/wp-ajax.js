@@ -180,13 +180,16 @@ $('tbody').on('click','.button-invert',function(){
 		url:wp_ajax.url,
 		data:{
 			action:'set_order_reminder',
+			user_id:wp_ajax.user_id,
 			id:order_id,
 			date:date,
 			hour:hour,
 			min:min
 		},
 		success:function(data){
-			console.log(data);
+			if(data == 1){
+				$('.set-reminder-button,.reminder-form').removeClass('active');
+			}
 		}
 	});
 	return false;

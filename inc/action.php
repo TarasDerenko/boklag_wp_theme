@@ -39,7 +39,7 @@ add_action( 'init', 'revcon_change_post_object' );
  *
  */
 
-add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
+//add_action( 'wp_login_failed', 'my_front_end_login_fail' );  // hook failed login
 
 function my_front_end_login_fail( $username ) {
    $referrer = $_SERVER['HTTP_REFERER'];  // where did the post submission come from?
@@ -49,6 +49,7 @@ function my_front_end_login_fail( $username ) {
        exit;
    }
 }
+
 
 /*
  *
@@ -112,14 +113,16 @@ function boklag_registration(){
     if(is_user_logged_in())
         return;
     global $error_message,$register_info;
-    $register_errors = array();
-    $register_info = array();
+    $error_message = array();
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['registration'],$_POST['user_login'],$_POST['pwd'],$_POST['approved'])){
         if(!filter_var($_POST['user_login'], FILTER_VALIDATE_EMAIL))
             $error_message['email'] = "Не корректный Email!";
         if(strlen($_POST['pwd']) < 6)
             $error_message['pwd'] = "Слишком короткий пароль";
-        if(sizeof($register_errors)){
+        if(empty($_POST['g-recaptcha-response']))
+            $error_message['email'] = "Вы не прошли проверку!";
+
+        if(sizeof($error_message)){
             add_action('wp_footer','show_popup_register',21);
             return;
         }
@@ -153,7 +156,51 @@ function boklag_registration(){
     }
 }
 add_action('init','boklag_registration');
+/*
+ *
+ *
+ *@custom login form
+ *
+ *
+ *
+ */
+function boklag_login(){
+    if(is_user_logged_in())
+        return;
+    global $error_login;
+    $error_login = array();
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
 
+        if(!filter_var($_POST['log'], FILTER_VALIDATE_EMAIL)){
+            $error_login['email'] = "Не корректный Email!";
+            add_action('wp_footer','show_popup_login',22);
+            return;
+        }
+
+        if(empty($_POST['g-recaptcha-response'])){
+            $error_login['email'] = "Вы не прошли проверку!";
+            add_action('wp_footer','show_popup_login',22);
+            return;
+        }
+
+        $user_login = wp_signon(array(
+            'user_login'    => $_POST['log'],
+            'user_password' => $_POST['pwd'],
+            'remember' => !empty($_POST['rememberme']) ? true : false,
+        ));
+
+        if( !is_wp_error($user_login) ){
+            wp_redirect(home_url());
+            die;
+        }else{
+            $error_login['login'] = 'Неправельный логин или пароль!';
+            add_action('wp_footer','show_popup_login',22);
+            return;
+        }
+    }
+
+}
+add_action('init','boklag_login');
 /*
  *
  *
@@ -201,9 +248,7 @@ function show_popup_register(){
  *
  *
  * */
-function show_popup_login(){
-    if(isset($_GET['login']) && $_GET['login'] == 'failed' && $_SERVER['REQUEST_METHOD'] == 'GET'):
-    ?>
+function show_popup_login(){  ?>
     <script>
         $(window).load(function () {
             $.magnificPopup.open({
@@ -215,9 +260,7 @@ function show_popup_login(){
         });
     </script>
         <?php
-    endif;
 }
-add_action('wp_footer','show_popup_login',22);
 /*
  *
  *
@@ -446,7 +489,6 @@ function create_new_blorders(){
 
 add_action('init','create_new_blorders');
 
-
 function init_blorders($type = null,$mark = null){
     global $bl_orders;
     $bl_orders = BLOrder::find(1,null,$type,$mark);
@@ -458,3 +500,63 @@ function end_blorders(){
     unset($bl_orders);
 }
 add_action('end_orders','end_blorders');
+
+
+
+function bl_send_mail(){
+    global $mail_error;
+    $mail_error = array();
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send-mail'])){
+        $admin_email = get_option('admin_email');
+        debug(wp_mail($admin_email,'Оформление Участка',$_POST['checkorder']));
+        if(!empty($_POST['checkorder'])){
+            wp_mail($admin_email,'Оформление Участка',$_POST['checkorder']);
+            wp_redirect(home_url()."?mail=send");
+            die;
+        }else{
+            $mail_error[] = "Не удалось отправить сообщение";
+        }
+    }
+    if(isset($_GET['mail']) && $_GET['mail'] == 'send')
+        $mail_error = 'Сообщение отправлено!';
+}
+add_action('init','bl_send_mail');
+
+/*
+ *
+ *
+ *
+ * @search in FAQ page
+ *
+ *
+ *
+ * */
+function search_in_faq($query){
+    if($query->is_search){
+        $query->set('post_type', 'faq');
+    }
+}
+add_action('pre_get_posts','search_in_faq');
+
+
+function bl_delete_orders(){
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['orders_page'],$_POST['del'])){
+        BLOrder::delete($_POST['del']);
+    }
+}
+add_action('init','bl_delete_orders');
+
+function get_reminder_in_reminder_page($arf){
+    global $bl_orders,$reminders;
+    if(isset($_GET['orders_page']) && $_GET['orders_page'] == 'reminder'){
+        $reminders = array();
+        $reminder = BLReminder::getReminderByID(array_map(function ($el){
+            return $el->id();
+        },$bl_orders));
+
+        foreach ($reminder as $rem){
+            $reminders[$rem->order_id] = $rem;
+        }
+    }
+}
+add_action('start_orders','get_reminder_in_reminder_page');

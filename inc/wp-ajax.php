@@ -82,6 +82,9 @@ function get_ajax_bl_orders(){
 }
 
 function set_bl_order_reminder(){
-    debug($_POST);
+    if(isset($_POST['user_id'])){
+        $date = date('Y-m-d H:i:s',strtotime(str_replace('/','-',$_POST['date']).' '.$_POST['hour'].':'.$_POST['min']));
+        echo BLReminder::setReminder($_POST['id'],$date);
+    }
     die;
 }

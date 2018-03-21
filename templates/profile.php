@@ -30,9 +30,9 @@
                             </div>
                         </div>
                         <div class="personal-form-row">
-                            <label for="">Логин:</label>
+                            <label for="">Имя и Фамилия</label>
                             <div class="personal-input-wrapper">
-                                <input type="text" value="<?php echo $boklag_user->user_login; ?>">
+                                <input type="text" value="<?php echo $boklag_user->user_name; ?>" name="user_name">
                                 <div class="personal-complete"></div>
                             </div>
                         </div>
