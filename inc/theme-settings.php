@@ -1,24 +1,4 @@
 <?php
-/***********************************************************/
-function my_login_logo() { ?>
-    <style type="text/css">
-        #login h1 a, .login h1 a {
-            background-image: url(<?php echo get_template_directory_uri(); ?>/img/Mediweblogo.jpg);
-            background-size: contain;
-            width: 100%;
-            margin: 0;
-            height: 300px;
-        }
-        body.login {
-            background-color: #fff;
-        }
-        body.login form {
-            box-shadow: none;
-        }
-    </style>
-<?php }
-
-add_action( 'login_enqueue_scripts', 'my_login_logo' );
 /*********************************************************/
 add_theme_support( 'post-thumbnails' );
 /*********************************************************/

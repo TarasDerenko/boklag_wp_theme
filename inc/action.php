@@ -182,9 +182,10 @@ function boklag_login(){
             add_action('wp_footer','show_popup_login',22);
             return;
         }
-
+        $user = get_user_by('email', $_POST['log']);
+        $user_log = (isset($user->ID)) ? $user->data->user_login : $_POST['log'];
         $user_login = wp_signon(array(
-            'user_login'    => $_POST['log'],
+            'user_login'    => $user_log,
             'user_password' => $_POST['pwd'],
             'remember' => !empty($_POST['rememberme']) ? true : false,
         ));
@@ -269,7 +270,7 @@ function show_popup_login(){  ?>
  *
  * */
 function checked_user_login(){
-    global $boklag_user,$boklag_user_meta,$biklag_user_avatar;
+    global $boklag_user,$boklag_user_meta,$boklag_user_avatar;
     if(!is_user_logged_in() && !wp_get_current_user()->exists()){
         wp_redirect(site_url('?reg=false'));
         die;
@@ -277,7 +278,7 @@ function checked_user_login(){
     $boklag_user = wp_get_current_user();
     $boklag_user_meta = get_user_meta($boklag_user->ID);
     $img = wp_get_attachment_image_url(get_bl_user_data($boklag_user_meta,'user_avatar'),'full');
-    $biklag_user_avatar = (!empty($img)) ? $img : DEFAULT_AVATAR;
+    $boklag_user_avatar = (!empty($img)) ? $img : DEFAULT_AVATAR;
 }
 add_action('is_boklag_user_login','checked_user_login');
 
@@ -337,6 +338,7 @@ function edit_boklag_profile(){
         $user_id = wp_update_user(array(
             'ID' => $boklag_user->ID,
             'user_email' =>  $_POST['user_email'],
+            'display_name' =>  $_POST['display_name'],
         ));
         $save = update_boklag_user_data($user_id,$_POST);
         if($save){
@@ -489,11 +491,11 @@ function create_new_blorders(){
 
 add_action('init','create_new_blorders');
 
-function init_blorders($type = null,$mark = null){
+function init_bl_orders($type = null,$mark = null){
     global $bl_orders;
     $bl_orders = BLOrder::find(1,null,$type,$mark);
 }
-add_action('start_orders','init_blorders',10,2);
+add_action('start_orders','init_bl_orders',10,2);
 
 function end_blorders(){
     global $bl_orders;
@@ -560,3 +562,44 @@ function get_reminder_in_reminder_page($arf){
     }
 }
 add_action('start_orders','get_reminder_in_reminder_page');
+
+
+function bl_user_notification($user_id = false){
+    global $boklag_user,$notifications,$notification_count;
+    $notification_count = 0;
+
+    $user_id || $user_id = $boklag_user->ID;
+
+    $notifications = array();
+    $el = array();
+    $notification_count += BLReminder::getReminderCountViewsByUser($user_id);
+    $reminders_notification = BLReminder::getReminderViewsByUser( $user_id );
+
+    foreach ($reminders_notification as $not){
+        $el['type'] = 'reminder';
+        $el['id'] = $not->id;
+        $el['order_id'] = $not->order_id;
+        $el['title'] = $not->title;
+        $el['description'] = $not->description;
+        $el['status'] = $not->status;
+        $el['remind_time'] = $not->remind_time;
+        $el['date_end'] = $not->date_end;
+        $notifications[] = $el;
+    }
+    return $notification_count;
+}
+add_action('is_boklag_user_login','bl_user_notification');
+
+
+function bl_get_template_notification($echo = false){
+    ob_start();
+    get_template_part('template_parts/profile','notification');
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    if($echo)
+        echo $content;
+    else
+        return $content;
+}
+add_action('get_template_notification','bl_get_template_notification');

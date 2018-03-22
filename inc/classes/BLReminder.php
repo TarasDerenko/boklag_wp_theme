@@ -32,7 +32,7 @@ class BLReminder
         return $wpdb->get_results('
         SELECT id,order_id
         FROM '.self::TABLE_NAME.'
-        WHERE (remind_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 HOUR)) 
+        WHERE (remind_time < DATE_ADD(NOW(), INTERVAL 1 HOUR)) 
         AND status = 0
         ');
     }
@@ -73,5 +73,41 @@ class BLReminder
                 return $el->id;
             },$reminders)).')
         ');
+    }
+
+
+    public static function getReminderViewsByUser($user_id,$limit = 5){
+        global $wpdb;
+        return $wpdb->get_results($wpdb->prepare("
+            SELECT `r`.`id`,`r`.`order_id`,`r`.`remind_time`,`o`.`title`,`o`.`description`,`o`.`status`,`o`.`date_end`
+            FROM ".self::TABLE_NAME." AS r
+            LEFT JOIN ".BLOrder::TABLE_NAME." AS o
+            ON (`r`.`order_id` = `o`.`id`)
+            WHERE `r`.`status` = 1 
+            AND `r`.`is_view` = 0
+            AND `o`.`user_id` = %d
+            ORDER BY `r`.`remind_time` ASC
+            LIMIT %d",$user_id,$limit));
+    }
+
+    public static function getReminderCountViewsByUser($user_id){
+        global $wpdb;
+        $res = $wpdb->get_results($wpdb->prepare("
+            SELECT COUNT(*) AS count 
+            FROM ".self::TABLE_NAME." AS r
+            LEFT JOIN ".BLOrder::TABLE_NAME." AS o
+            ON (`r`.`order_id` = `o`.`id`)
+            WHERE `r`.`status` = 1 
+            AND `r`.`is_view` = 0
+            AND `o`.`user_id` = %d           
+            ",$user_id));
+        if(isset($res[0]->count))
+            return $res[0]->count;
+        return 0;
+    }
+
+    public static function updateReminderView($id){
+        global $wpdb;
+        return $wpdb->update(self::TABLE_NAME,['is_view' => 1],['id' => $id]);
     }
 }

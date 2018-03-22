@@ -195,3 +195,35 @@ $('tbody').on('click','.button-invert',function(){
 	return false;
 });
 
+$('.notification-dropdown').on('click','.notification-dropdown-close',function () {
+	var _this = this;
+	var type = $(this).attr('data-type');
+	var id = $(this).attr('data-notification');
+	var count = $('.notification-count');
+
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'update_notification',
+			type:type,
+			id:id,
+			user_id:wp_ajax.user_id
+		},
+		success:function (data) {
+
+			data = JSON.parse(data);
+			$(_this).closest('.notification-dropdown').html(data.nots);
+
+
+			if(data.count > 0){
+                count.text(data.count);
+			}else{
+                count.remove();
+                $('.notification-dropdown').removeClass('active');
+			}
+
+
+        }
+	});
+});

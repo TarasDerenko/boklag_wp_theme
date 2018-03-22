@@ -11,6 +11,9 @@ add_action('wp_ajax_ajax_bl_orders', 'get_ajax_bl_orderse');
 add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
 add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
 
+add_action('wp_ajax_update_notification', 'bl_update_notification');
+add_action('wp_ajax_update_notification', 'bl_update_notification');
+
 function show_news_more(){
   $result = array();
   $news = get_posts(array(
@@ -87,4 +90,19 @@ function set_bl_order_reminder(){
         echo BLReminder::setReminder($_POST['id'],$date);
     }
     die;
+}
+
+
+function bl_update_notification(){
+    if(!isset($_POST['type'],$_POST['id']))
+        die;
+
+    if($_POST['type'] == 'reminder'){
+        BLReminder::updateReminderView($_POST['id']);
+        $res['count'] = bl_user_notification($_POST['user_id']);
+        $res['nots'] = bl_get_template_notification();
+        echo json_encode($res);
+        die;
+    }
+
 }

@@ -10,7 +10,7 @@
                 <div class="personal-content">
                     <div class="personal-content-photo">
                         <div class="personal-photo">
-                            <img src="<?php echo $biklag_user_avatar; ?>" alt="">
+                            <img src="<?php echo $boklag_user_avatar; ?>" alt="">
                         </div>
                         <div class="personal-photo-buttons">
                             <label class="button-reload">
@@ -32,7 +32,7 @@
                         <div class="personal-form-row">
                             <label for="">Имя и Фамилия</label>
                             <div class="personal-input-wrapper">
-                                <input type="text" value="<?php echo $boklag_user->user_name; ?>" name="user_name">
+                                <input type="text" value="<?php echo $boklag_user->display_name; ?>" name="display_name">
                                 <div class="personal-complete"></div>
                             </div>
                         </div>
