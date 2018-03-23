@@ -4,6 +4,13 @@
         <div class="container">
             <h1 class="section-title">Новый заказ</h1>
         </div>
+        <?php if(isset($_GET['order']) && $_GET['order'] == 'send'): ?>
+            <div class="edit-blok-info">
+                <p>
+                    Ваш заказ успешно одправлен!
+                </p>
+            </div>
+        <?php endif;?>
     </section>
     <section class="page-content-section">
         <div class="container-wide">

@@ -46,8 +46,11 @@ function init(){
 
 
     marker = new google.maps.Marker(markerOptions);
-    inp_lat.value = marker.position.lat();
-    inp_lng.value = marker.position.lng();
+    if(inp_lat && inp_lng){
+        inp_lat.value = marker.position.lat();
+        inp_lng.value = marker.position.lng();
+    }
+
     circle = getCircle(0,marker.position,map);
 
     /*map.addListener('dblclick',function (e) {

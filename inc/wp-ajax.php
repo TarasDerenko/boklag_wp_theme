@@ -5,14 +5,14 @@ add_action('wp_ajax_nopriv_show_news_more', 'show_news_more');
 add_action('wp_ajax_google_login', 'sign_on_from_google');
 add_action('wp_ajax_nopriv_google_login', 'sign_on_from_google');
 
-add_action('wp_ajax_ajax_bl_orders', 'get_ajax_bl_orders');
-add_action('wp_ajax_ajax_bl_orders', 'get_ajax_bl_orderse');
-
 add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
-add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
+add_action('wp_ajax_nopriv_set_order_reminder', 'set_bl_order_reminder');
 
 add_action('wp_ajax_update_notification', 'bl_update_notification');
-add_action('wp_ajax_update_notification', 'bl_update_notification');
+add_action('wp_ajax_nopriv_update_notification', 'bl_update_notification');
+
+add_action('wp_ajax_service_autocomplete', 'bl_service_autocomplete');
+add_action('wp_ajax_nopriv_service_autocomplete', 'bl_service_autocomplete');
 
 function show_news_more(){
   $result = array();
@@ -69,21 +69,6 @@ function sign_on_from_google(){
 }
 
 
-function get_ajax_bl_orders(){
-    if(isset($_POST['paged'])){
-        $type = (!empty($_POST['type'])) ? $_POST['type'] : null;
-        $mark = (!empty($_POST['mark'])) ? $_POST['mark'] : null;
-        $orders = BLOrder::find($_POST['paged'],null,$type,$mark);
-        $pagination = BLOrder::pagination($_POST['paged'],null,$type,$mark);
-        echo json_encode(array(
-            'orders' => $orders,
-            'pag' => $pagination,
-            'bell' => get_reminder_bell()
-        ));
-    }
-    die;
-}
-
 function set_bl_order_reminder(){
     if(isset($_POST['user_id'])){
         $date = date('Y-m-d H:i:s',strtotime(str_replace('/','-',$_POST['date']).' '.$_POST['hour'].':'.$_POST['min']));
@@ -104,5 +89,12 @@ function bl_update_notification(){
         echo json_encode($res);
         die;
     }
+}
 
+function bl_service_autocomplete(){
+    if(isset($_POST['s'])){
+        $services = BLService::searchServices($_POST['s']);
+        echo json_encode($services);
+    }
+    die;
 }

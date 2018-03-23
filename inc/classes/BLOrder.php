@@ -39,12 +39,17 @@ class BLOrder
     const MARK_GREEN    = 6;
     const MARK_BLUE     = 7;
 
+    const STATUS_WAIT = 1;
+    const STATUS_IN_WORK = 2;
+    const STATUS_DONE = 3;
+
     const TABLE_NAME = 'wp_bl_orders';
 
     public $id;
     private $order_id;
     public $title;
     public $description;
+    public $area;
     public $status;
     public $price;
     public $region;
@@ -94,6 +99,32 @@ class BLOrder
         return array();
     }
 
+    public static function get_status($key){
+        $status = array(
+            '1' => 'ожидает выполнения',
+            '2' => 'в работе',
+            '3' => 'выполнено'
+        );
+        if(key_exists($key,$status))
+            return $status[$key];
+        return 'не определен';
+    }
+
+    public static function get_mark($key){
+        $color = array(
+            1 => 'white',
+            2 => 'orange',
+            3 => 'red',
+            4 => 'purple',
+            5 => 'yellow',
+            6 => 'green',
+            7 => 'blue',
+        );
+        if(key_exists($key,$color))
+            return $color[$key];
+        return 'white';
+    }
+
     public function id(){
         return $this->id;
     }
@@ -123,6 +154,7 @@ class BLOrder
 
     private function get_update_fields(){
         $fields = array();
+        $this->date_change = date('Y-m-d H:i:s');
         foreach ($this as $key => $value){
             if($key == 'id' || $key == 'date_create' || empty($value))
                 continue;
@@ -152,6 +184,17 @@ class BLOrder
     public static function find($paged = 1,$limit = null, $type = null, $mark = null,$is_user = true){
         global $wpdb;
         $str = '';
+        $query_var = get_query_var( 'orders_page' );
+
+        if(!empty($query_var)){
+            $query_arr = explode('/',$query_var);
+            if(isset($query_arr[2]) && is_numeric($query_arr[2]))
+                $paged = $query_arr[2];
+            else if(isset($query_arr[1]) && is_numeric($query_arr[1]))
+                $paged = $query_arr[1];
+            else
+                $paged = $paged;
+        }
         if($is_user){
             $user = wp_get_current_user();
             if($user->exists()){
@@ -177,10 +220,23 @@ class BLOrder
     public static function pagination($paged = 1,$limit = null,$type = null, $mark = null,$is_user = true){
 
         global $wpdb;
+        $query_var = get_query_var( 'orders_page' );
+
+        if(!empty($query_var)){
+            $query_arr = explode('/',$query_var);
+            if(isset($query_arr[2]) && is_numeric($query_arr[2]))
+                $paged = $query_arr[2];
+            else if(isset($query_arr[1]) && is_numeric($query_arr[1]))
+                $paged = $query_arr[1];
+            else
+                $paged = $paged;
+        }
         $args = array(
             'paged' => $paged,
             'limit' => ($limit) ? $limit : get_option('bl-limit'),
         );
+
+
 
         $str = '';
         if($is_user){
@@ -228,7 +284,7 @@ class BLOrder
         if($current == 1){
             $page_linksss_1 = '';
         }else{
-            $page_linksss_1 = '<li><a data-paged="'. ($current - 1) .'" aria-label="Previous">&laquo;</a></li>';
+            $page_linksss_1 = '<li><a href="'. esc_url( add_query_arg( 'paged', ($current - 1) ) ) .'" aria-label="Previous">&laquo;</a></li>';
         }
         for ( $n = 1; $n <= $total; $n++ ) :
             if ( $n == $current ) :
@@ -236,7 +292,7 @@ class BLOrder
                 $dots = true;
             else :
                 if ( $args['show_all'] || ( $n <= $end_size || ( $current && $n >= $current - $mid_size && $n <= $current + $mid_size ) || $n > $total - $end_size ) ) :
-                    $page_links[] = "<li><a data-paged='" . number_format_i18n( $n ) . "'>" . number_format_i18n( $n ) . "</a></li>";
+                    $page_links[] = "<li><a href='" . esc_url( add_query_arg( 'paged', number_format_i18n( $n ) ) ) . "'>" . number_format_i18n( $n ) . "</a></li>";
                     $dots = true;
                 elseif ( $dots && ! $args['show_all'] ) :
                     $page_links[] = '<li><span class="page-numbers dots">' . __( '&hellip;' ) . '</span></li>';
@@ -247,7 +303,7 @@ class BLOrder
         if($current == $total){
             $page_linksss_2 = '';
         }else{
-            $page_linksss_2 = '<li><a data-paged="' . ($current + 1) . '" aria-label="Next">&raquo;</a></li>';
+            $page_linksss_2 = '<li><a href="' . esc_url( add_query_arg( 'paged', ($current + 1) ) ) . '" aria-label="Next">&raquo;</a></li>';
         }
         $r = '<nav aria-label="Page navigation" class="bl-pagenavi"><ul class="pagination">'.$page_linksss_1;
         $r .= join("\n", $page_links);

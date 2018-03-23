@@ -5,6 +5,13 @@
 <main class="main">
     <section class="personal-content-section">
         <h1 class="section-title">Личный кабинет</h1>
+        <?php if(isset($_GET['edit']) && $_GET['edit'] == 'true'): ?>
+            <div class="edit-blok-info">
+                <p>
+                    Изменения прошли успешно!
+                </p>
+            </div>
+        <?php endif;?>
         <div class="personal-content-wrapper">
             <form method="post" enctype="multipart/form-data">
                 <div class="personal-content">

@@ -182,8 +182,13 @@ function boklag_login(){
             add_action('wp_footer','show_popup_login',22);
             return;
         }
-        $user = get_user_by('email', $_POST['log']);
-        $user_log = (isset($user->ID)) ? $user->data->user_login : $_POST['log'];
+        if(username_exists( $_POST['log'] )){
+            $user_log = $_POST['log'];
+        }else{
+            $user = get_user_by('email', $_POST['log']);
+            $user_log = (isset($user->ID)) ? $user->data->user_login : $_POST['log'];
+        }
+
         $user_login = wp_signon(array(
             'user_login'    => $user_log,
             'user_password' => $_POST['pwd'],
@@ -342,7 +347,7 @@ function edit_boklag_profile(){
         ));
         $save = update_boklag_user_data($user_id,$_POST);
         if($save){
-            wp_redirect(site_url('/kabinet/'));
+            wp_redirect(site_url('/kabinet/?edit=true'));
             die;
         }
 
@@ -457,9 +462,10 @@ function action_wpcf7_before_send_mail( $contact_form ) {
 // add the action
 add_action( 'wpcf7_before_send_mail', 'action_wpcf7_before_send_mail', 10, 1 );
 
-function create_new_blorders(){
+function create_new_bl_orders(){
     global $error_message;
-    if(isset($_GET['orders_page']) && $_GET['orders_page'] == 'new' && $_SERVER['REQUEST_METHOD'] == 'POST'){
+    $new = get_query_var( 'orders_page' );
+    if(!empty($new) && $new == 'new' && $_SERVER['REQUEST_METHOD'] == 'POST'){
         $document = array();
         $order = new BLOrder();
         $order->load($_POST);
@@ -482,14 +488,14 @@ function create_new_blorders(){
             }
             $order->document = serialize($document);
         }
-        for ($i = 1; $i < 61; $i++){
-            $order->title = 'ТД по установлению границ участка в натуре '.$i;
-            $order->insert();
+        if($order->insert()){
+            wp_redirect(site_url('/orders/new/?order=send'));
         }
+
     }
 }
 
-add_action('init','create_new_blorders');
+add_action('init','create_new_bl_orders');
 
 function init_bl_orders($type = null,$mark = null){
     global $bl_orders;
@@ -542,7 +548,8 @@ add_action('pre_get_posts','search_in_faq');
 
 
 function bl_delete_orders(){
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['orders_page'],$_POST['del'])){
+    $query_var = get_query_var( 'orders_page' );
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($query_var) && isset($_POST['del'])){
         BLOrder::delete($_POST['del']);
     }
 }
@@ -550,7 +557,8 @@ add_action('init','bl_delete_orders');
 
 function get_reminder_in_reminder_page($arf){
     global $bl_orders,$reminders;
-    if(isset($_GET['orders_page']) && $_GET['orders_page'] == 'reminder'){
+    $query_var = get_query_var( 'orders_page' );
+    if(!empty($query_var) && $query_var == 'reminder'){
         $reminders = array();
         $reminder = BLReminder::getReminderByID(array_map(function ($el){
             return $el->id();

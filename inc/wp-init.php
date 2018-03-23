@@ -12,5 +12,6 @@ require_once(__DIR__.'/wp-ajax.php');
 require_once(__DIR__.'/admin/admin-init.php');
 require_once(__DIR__ . '/classes/BLOrder.php');
 require_once(__DIR__ . '/classes/BLReminder.php');
+require_once(__DIR__ . '/classes/BLService.php');
 require_once(__DIR__ . '/classes/BoklagDB.php');
 require_once(__DIR__ . '/classes/CreditCard.php');

@@ -34,21 +34,24 @@ function update_boklag_user_data($id,array $args){
 	return true;
 }
 
-add_action('init', 'do_rewrite');
-function do_rewrite(){
 
-    add_rewrite_rule( '^orders/([^/]*)/([^/]*)/?$', 'index.php?p=121&orders_page=$matches[1]', 'top' );
+add_action('init', 'dcc_rewrite_tags');
+function dcc_rewrite_tags() {
+    add_rewrite_tag('%orders_page%', '([^&]+)');
+}
 
-    add_filter( 'query_vars', function( $vars ){
-        $vars[] = 'orders_page';
-        return $vars;
-    } );
+add_action('init', 'dcc_rewrite_rules');
+function dcc_rewrite_rules() {
+    add_rewrite_rule('^orders/(.+)/?','index.php?page_id=121&orders_page=$matches[1]','top');
 }
 
 add_filter( 'template_include', 'my_callback' );
 function my_callback( $original_template ) {
-    if ( isset($_GET['orders_page']) ){
-        $path = __DIR__ . '/order_parts/'.$_GET['orders_page'].'.php';
+    $query_var = get_query_var( 'orders_page' );
+
+    if ( !empty($query_var) ){
+        $query = explode('/',$query_var);
+        $path = __DIR__ . '/order_parts/'.$query[0].'.php';
         if(file_exists($path))
             return $path;
         else
