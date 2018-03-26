@@ -10,6 +10,12 @@
                     Ваш заказ успешно одправлен!
                 </p>
             </div>
+        <?php elseif (!empty($error_message['new-order'])):?>
+            <div class="edit-blok-info">
+                <p>
+                    <?= $error_message['new-order']; ?>
+                </p>
+            </div>
         <?php endif;?>
     </section>
     <section class="page-content-section">
@@ -150,10 +156,10 @@
                                     <input type="hidden" id="map-lat" name="lat" value="0">
                                     <input type="hidden" id="map-lng" name="lng" value="0">
                                     <input type="hidden" id="map-rang" name="rang" value="0">
-                                    <input type="hidden" id="map-lat-1" name="rang" value="0">
-                                    <input type="hidden" id="map-lat-2" name="rang" value="0">
-                                    <input type="hidden" id="map-lng-1" name="lng" value="0">
-                                    <input type="hidden" id="map-lng-2" name="lng" value="0">
+                                    <input type="hidden" id="map-lat-1" value="0">
+                                    <input type="hidden" id="map-lat-2" value="0">
+                                    <input type="hidden" id="map-lng-1" value="0">
+                                    <input type="hidden" id="map-lng-2" value="0">
                                 </div>
                             </div>
                             <div class="new-order-documents">
@@ -174,8 +180,8 @@
                                 </div>
                             </div>
                             <div class="new-order-buttons">
-                                <button type="button" class="button button-blue new-order-cancel"><span>Отмена</span></button>
-                                <button type="submit" class="button new-order-submit"><span>Заключить договор</span></button>
+                                <button type="button" class="button button-blue new-order-cancel" name="cancel-order"><span>Отмена</span></button>
+                                <button type="submit" class="button new-order-submit" name="new-order"><span>Заключить договор</span></button>
                             </div>
                         </form>
                     </div>

@@ -55,7 +55,7 @@ global $order;
             </div>
         </div>
         <div class="order-detailed-map">
-            <div id="map" class="location-map"></div>
+            <div id="map-<?= $order->id ?>" data-lat="<?= $order->lat ?>" data-lng="<?= $order->lng ?>" data-rang="<?= $order->rang ?>" class="location-map"></div>
         </div>
         <button class="executer-answers-show">Ответов (2)<span class="arrow"></span></button>
     </div>

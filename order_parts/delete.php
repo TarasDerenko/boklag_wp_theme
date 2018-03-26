@@ -11,7 +11,7 @@
                 <div class="side-menu">
                     <?php get_sidebar('profile')?>
                 </div>
-                <?php do_action('start_orders')?>
+                <?php do_action('start_orders',-BLOrder::TYPE_ARCHIVE)?>
                 <div class="main-content">
                     <div class="archive-content">
                         <form  method="post">
@@ -33,7 +33,7 @@
                                             <td><?php echo $order->id();?></td>
                                             <td><?php echo $order->title;?></td>
                                             <td><?php echo BLOrder::get_status($order->status);?></td>
-                                            <td><?php echo $order->address;?></td>
+                                            <td><?php echo $order->street.' '.$order->house;?></td>
                                             <td><?php echo $order->date_end;?></td>
                                             <td>
                                                 <label class="custom-checkbox">
@@ -47,8 +47,8 @@
                                 </table>
                             </div>
                             <div class="content-table-buttons">
-                                <button class="button button-invert button-blue"><span>Поместить в архив</span></button>
-                                <button class="button button-invert"><span>Удалить</span></button>
+                                <button class="button button-invert button-blue" name="archive"><span>Поместить в архив</span></button>
+                                <button class="button button-invert" name="del-but"><span>Удалить</span></button>
                             </div>
                         </form>
                     </div>

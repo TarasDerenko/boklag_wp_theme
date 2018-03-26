@@ -178,7 +178,7 @@ $('.notification-dropdown').on('click','.notification-dropdown-close',function (
 
 $( "[name=checkorder]" ).autocomplete({
     source: function(request, response) {
-        jQuery.ajax({
+        $.ajax({
             method: 'post',
             url: wp_ajax.url,
             data: {
@@ -209,4 +209,21 @@ $( "[name=checkorder]" ).autocomplete({
     	$(this).val(ui.item.value);
     	$(this).attr('data-id',ui.item.id);
     }
+});
+
+$(".mark-set-color").click(function () {
+	var el = $(this);
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'change_mark',
+			id:el.closest('.mark-set').attr('data-id'),
+			mark:el.attr('data-mark')
+		},
+		success:function (data) {
+			console.log(data);
+        }
+	});
+    ;
 });

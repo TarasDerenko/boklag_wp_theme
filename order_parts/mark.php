@@ -1,4 +1,6 @@
-<?php get_header('profile')?>
+<?php get_header('profile');
+$marks = BLOrder::get_mark();
+?>
 <main class="main">
     <section class="page-title-section">
         <div class="container">
@@ -29,23 +31,23 @@
                                 <tbody>
                                 <?php foreach($bl_orders as $order): ?>
                                 <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
+                                    <td><?php echo $order->id;?></td>
+                                    <td><?php echo $order->title;?></td>
+                                    <td><?php echo BLOrder::get_status($order->status);?></td>
+                                    <td><?php echo $order->street.' '.$order->house;?></td>
+                                    <td><?php echo $order->date_end;?></td>
                                     <td>
                                         <div class="mark-area">
                                             <button class="mark-button">
-                                                <span class="mark-color white"></span>
+                                                <span class="mark-color <?= $marks[$order->mark] ?>"></span>
                                             </button>
-                                            <div class="mark-set">
-                                                <span class="mark-set-color orange" data-color="orange" data-mark="<?= BLOrder::MARK_ORANGE ?>"></span>
-                                                <span class="mark-set-color yellow" data-color="yellow" data-mark="<?= BLOrder::MARK_YELLOW ?>"></span>
-                                                <span class="mark-set-color red" data-color="red" data-mark="<?= BLOrder::MARK_RED ?>"></span>
-                                                <span class="mark-set-color green" data-color="green" data-mark="<?= BLOrder::MARK_GREEN ?>"></span>
-                                                <span class="mark-set-color purple" data-color="purple" data-mark="<?= BLOrder::MARK_PURPLE ?>"></span>
-                                                <span class="mark-set-color blue" data-color="blue" data-mark="<?= BLOrder::MARK_BLUE ?>"></span>
+                                            <div class="mark-set" data-id="<?= $order->id ?>">
+                                                <?php foreach ($marks as $key => $mark):
+                                                if($order->mark == $key)
+                                                    continue;
+                                                 ?>
+                                                <span class="mark-set-color <?= $mark ?>" data-color="<?= $mark ?>" data-mark="<?= $key ?>"></span>
+                                                <?php endforeach; ?>
                                             </div>
                                         </div>
                                     </td>

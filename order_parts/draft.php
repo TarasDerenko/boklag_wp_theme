@@ -31,7 +31,7 @@
                                         <td><?php echo $order->id();?></td>
                                         <td><?php echo $order->title;?></td>
                                         <td><?php echo BLOrder::get_status($order->status);?></td>
-                                        <td><?php echo $order->address;?></td>
+                                        <td><?php echo $order->street.' '.$order->house;?></td>
                                         <td><?php echo $order->date_end;?></td>
                                     </tr>
                                 <?php endforeach;?>

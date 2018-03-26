@@ -14,11 +14,11 @@ global $bl_orders,$order;
         </thead>
         <tbody>
         <?php if(is_array($bl_orders)): foreach ($bl_orders as $order):?>
-        <tr class="order-info">
-            <td><?php echo $order->id();?></td>
+        <tr class="order-info" data-id="<?php echo $order->id; ?>">
+            <td><?php echo $order->id;?></td>
             <td><?php echo $order->title;?></td>
             <td><?php echo BLOrder::get_status($order->status);?></td>
-            <td><?php echo $order->address;?></td>
+            <td><?php echo $order->street.' '.$order->house;?></td>
             <td><?php echo $order->date_end;?></td>
         </tr>
         <tr class="order-info-extend">

@@ -464,8 +464,8 @@ add_action( 'wpcf7_before_send_mail', 'action_wpcf7_before_send_mail', 10, 1 );
 
 function create_new_bl_orders(){
     global $error_message;
-    $new = get_query_var( 'orders_page' );
-    if(!empty($new) && $new == 'new' && $_SERVER['REQUEST_METHOD'] == 'POST'){
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new-order'])){
         $document = array();
         $order = new BLOrder();
         $order->load($_POST);
@@ -490,7 +490,11 @@ function create_new_bl_orders(){
         }
         if($order->insert()){
             wp_redirect(site_url('/orders/new/?order=send'));
+            die;
+        }else{
+            $error_message['new-order'] = "Не удалось отправить Заказ!";
         }
+
 
     }
 }
@@ -548,9 +552,14 @@ add_action('pre_get_posts','search_in_faq');
 
 
 function bl_delete_orders(){
-    $query_var = get_query_var( 'orders_page' );
-    if($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($query_var) && isset($_POST['del'])){
-        BLOrder::delete($_POST['del']);
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['del'])){
+        if(isset($_POST['del-but']))
+            BLOrder::delete($_POST['del']);
+        if(isset($_POST['archive']))
+            BLOrder::changeType(BLOrder::TYPE_ARCHIVE,$_POST['del']);
+
+        wp_redirect($_SERVER['REQUEST_URI']);
+        die;
     }
 }
 add_action('init','bl_delete_orders');

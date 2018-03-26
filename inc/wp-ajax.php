@@ -14,6 +14,9 @@ add_action('wp_ajax_nopriv_update_notification', 'bl_update_notification');
 add_action('wp_ajax_service_autocomplete', 'bl_service_autocomplete');
 add_action('wp_ajax_nopriv_service_autocomplete', 'bl_service_autocomplete');
 
+add_action('wp_ajax_change_mark', 'bl_change_mark');
+add_action('wp_ajax_nopriv_change_mark', 'bl_change_mark');
+
 function show_news_more(){
   $result = array();
   $news = get_posts(array(
@@ -96,5 +99,11 @@ function bl_service_autocomplete(){
         $services = BLService::searchServices($_POST['s']);
         echo json_encode($services);
     }
+    die;
+}
+
+function bl_change_mark(){
+    if(isset($_POST['id'],$_POST['mark']))
+        BLOrder::changeMark($_POST['mark'],$_POST['id']);
     die;
 }

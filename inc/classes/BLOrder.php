@@ -31,7 +31,7 @@ class BLOrder
     const TYPE_ARCHIVE  = 3;
     const TYPE_DRAFT    = 4;
 
-    const MARK_NORMAL   = 1;
+    const MARK_WHITE    = 1;
     const MARK_ORANGE   = 2;
     const MARK_RED      = 3;
     const MARK_PURPLE   = 4;
@@ -110,19 +110,21 @@ class BLOrder
         return 'не определен';
     }
 
-    public static function get_mark($key){
+    public static function get_mark($key = null){
         $color = array(
-            1 => 'white',
-            2 => 'orange',
-            3 => 'red',
-            4 => 'purple',
-            5 => 'yellow',
-            6 => 'green',
-            7 => 'blue',
+            self::MARK_WHITE => 'white',
+            self::MARK_ORANGE => 'orange',
+            self::MARK_RED => 'red',
+            self::MARK_PURPLE => 'purple',
+            self::MARK_YELLOW => 'yellow',
+            self::MARK_GREEN => 'green',
+            self::MARK_BLUE => 'blue',
         );
-        if(key_exists($key,$color))
+        if($key && key_exists($key,$color))
             return $color[$key];
-        return 'white';
+        if($key)
+            return 'white';
+        return $color;
     }
 
     public function id(){
@@ -146,6 +148,7 @@ class BLOrder
         if(!empty($this->id))
             return false;
         global $wpdb;
+        $this->user_id = get_current_user_id();
         $this->date_change = date('Y-m-d H:i:s');
         $fields = $this->get_update_fields();
         return $wpdb->insert(self::TABLE_NAME,$fields);
@@ -205,13 +208,15 @@ class BLOrder
             $limit = get_option('bl-limit');
         $offset = ($paged - 1) * $limit;
 
-        if($type)
+        if($type && $type > 0)
             $str .= "AND `type` = $type ";
+        if($type && $type < 0)
+            $str .= "AND `type` != ".abs($type)." ";
         if($mark)
             $str .= "AND `mark` = $mark ";
 
 
-        $query = $wpdb->prepare("SELECT * FROM ".self::TABLE_NAME." ".$str." LIMIT %d OFFSET %d",array($limit,$offset));
+        $query = $wpdb->prepare("SELECT * FROM ".self::TABLE_NAME." ".$str." ORDER BY id DESC LIMIT %d OFFSET %d",array($limit,$offset));
         $results = $wpdb->get_results($query);
 
         return self::parse_all_results($results);
@@ -317,6 +322,20 @@ class BLOrder
             return $wpdb->query("DELETE FROM ".self::TABLE_NAME." WHERE id IN(".implode(',',$ids).")" );
         return $wpdb->delete(self::TABLE_NAME,array('id' => $ids));
 
+    }
+
+    public static function changeType($type,$ids){
+        global $wpdb;
+        if(is_array($ids))
+            return $wpdb->query("UPDATE ".self::TABLE_NAME." SET `type` = $type WHERE id IN(".implode(',',$ids).")" );
+        return $wpdb->update(self::TABLE_NAME,array('type' => $type),array('id' => $ids));
+    }
+
+    public static function changeMark($mark,$ids){
+        global $wpdb;
+        if(is_array($ids))
+            return $wpdb->query("UPDATE ".self::TABLE_NAME." SET `mark` = $mark WHERE id IN(".implode(',',$ids).")" );
+        return $wpdb->update(self::TABLE_NAME,array('mark' => $mark),array('id' => $ids));
     }
 }
 
