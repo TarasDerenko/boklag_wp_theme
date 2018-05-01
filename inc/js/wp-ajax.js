@@ -54,16 +54,7 @@ function create_news(item){
 	return block;
 }
 
-function myCreateElement(tag,attr,child){
-	var el = document.createElement(tag);
-	if(attr){
-		for(var key in attr)
-			el.setAttribute(key,attr[key])				
-	}
-	if(child)
-		el.innerHTML = child;
-	return el;
-}
+
 /******************************************************/
 var auth2;
 function gInit() {
@@ -91,7 +82,7 @@ $('.popup-captcha-google').click(function(){
                 token: token
             },
             success: function(msg){
-                window.location.href = "/";
+            	window.location.href = "/kabinet";
             },
             error: function(){
             }
@@ -118,7 +109,7 @@ function myCreateElement(tag,attr,text){
 
 $('tbody').on('click','.button-invert',function(){
 	var tr = $(this).closest('tr');
-	var order_id = tr.attr('data-order');
+	var order_id = tr.attr('data-id');
 	var date = tr.find('.reminder-field-date').val();
 	var hour = tr.find('.reminder-field-hour').val();
 	var min = tr.find('.reminder-field-min').val();
@@ -176,7 +167,7 @@ $('.notification-dropdown').on('click','.notification-dropdown-close',function (
 });
 
 
-$( "[name=checkorder]" ).autocomplete({
+$( "[name=checkorder],[name=title]" ).autocomplete({
     source: function(request, response) {
         $.ajax({
             method: 'post',
@@ -191,9 +182,7 @@ $( "[name=checkorder]" ).autocomplete({
                     response({
                         label: "Нету такой услуги!"
                     });
-
                 } else {
-
                    response(jQuery.map(data, function(value, key) {
                         return {
                             label: value.title,
@@ -209,6 +198,8 @@ $( "[name=checkorder]" ).autocomplete({
     	$(this).val(ui.item.value);
     	$(this).attr('data-id',ui.item.id);
     }
+}).focus(function () {
+    $(this).autocomplete("search",$(this).val());
 });
 
 $(".mark-set-color").click(function () {
@@ -222,8 +213,82 @@ $(".mark-set-color").click(function () {
 			mark:el.attr('data-mark')
 		},
 		success:function (data) {
-			console.log(data);
+
         }
 	});
-    ;
+});
+
+
+$('[name="send-email-friend"]').click(function () {
+    var info = $('#send-mail .info');
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'add_friend',
+			email:$('#email-friend').val()
+		},
+		success:function (data) {
+			data = JSON.parse(data);
+            info.removeClass('error success');
+
+			if(data.errors.trim().length > 0){
+                info.addClass('error');
+                info.html(data.errors);
+                return;
+			}
+
+            if(data.message.trim().length > 0){
+                info.addClass('success');
+                info.html(data.message);
+                return;
+            }
+        }
+	});
+});
+
+$('.reminder-form').on('click','.button-update',function(){
+    var tr = $(this).closest('tr');
+    var order_id = tr.attr('data-id');
+    var date = tr.find('.reminder-field-date').val();
+    var hour = tr.find('.reminder-field-hour').val();
+    var min = tr.find('.reminder-field-min').val();
+    $.ajax({
+        method:'post',
+        url:wp_ajax.url,
+        data:{
+            action:'update_order_reminder',
+            id:order_id,
+            date:date,
+            hour:hour,
+            min:min
+        },
+        success:function(data){
+            if(data == 1){
+                $('.set-reminder-button,.reminder-form').removeClass('active');
+            }
+        }
+    });
+    return false;
+});
+
+$('.reminder-form').on('click','.button-delete',function(){
+    var tr = $(this).closest('tr');
+    var td = $(this).closest('td');
+    var order_id = tr.attr('data-id');
+    $.ajax({
+        method:'post',
+        url:wp_ajax.url,
+        data:{
+            action:'delete_order_reminder',
+            id:order_id
+        },
+        success:function(data){
+            if(data == 1){
+                $('.set-reminder-button,.reminder-form').removeClass('active');
+                td.removeClass('selected');
+            }
+        }
+    });
+    return false;
 });

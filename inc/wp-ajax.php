@@ -8,6 +8,12 @@ add_action('wp_ajax_nopriv_google_login', 'sign_on_from_google');
 add_action('wp_ajax_set_order_reminder', 'set_bl_order_reminder');
 add_action('wp_ajax_nopriv_set_order_reminder', 'set_bl_order_reminder');
 
+add_action('wp_ajax_update_order_reminder', 'update_bl_order_reminder');
+add_action('wp_ajax_nopriv_update_order_reminder', 'update_bl_order_reminder');
+
+add_action('wp_ajax_delete_order_reminder', 'delete_bl_order_reminder');
+add_action('wp_ajax_nopriv_delete_order_reminder', 'delete_bl_order_reminder');
+
 add_action('wp_ajax_update_notification', 'bl_update_notification');
 add_action('wp_ajax_nopriv_update_notification', 'bl_update_notification');
 
@@ -16,6 +22,9 @@ add_action('wp_ajax_nopriv_service_autocomplete', 'bl_service_autocomplete');
 
 add_action('wp_ajax_change_mark', 'bl_change_mark');
 add_action('wp_ajax_nopriv_change_mark', 'bl_change_mark');
+
+add_action('wp_ajax_add_friend', 'bl_add_friend');
+add_action('wp_ajax_nopriv_add_friend', 'bl_add_friend');
 
 function show_news_more(){
   $result = array();
@@ -54,8 +63,8 @@ function sign_on_from_google(){
             'user_pass' => $_POST['token'],
             'first_name' =>$_POST['name'],
             'display_name' => $_POST['name'],
-            'user_email' => $_POST['email']
-        ));   
+            'user_email' => $_POST['email'],
+        ));
   wp_clear_auth_cookie();
   wp_set_current_user ( $user_id );
   wp_set_auth_cookie($user_id);    
@@ -64,8 +73,9 @@ function sign_on_from_google(){
       require_once ABSPATH . 'wp-admin/includes/file.php';
       require_once ABSPATH . 'wp-admin/includes/image.php';
       $image_id = media_sideload_image( $_POST['image'], 0, null, 'id' );
-      if(!is_wp_error($img_tag)){
+      if(!is_wp_error($image_id)){
         update_user_meta($user_id,'user_avatar',$image_id);
+        update_user_meta($user_id,'google_account',1);
       }
   }
   die;
@@ -75,11 +85,41 @@ function sign_on_from_google(){
 function set_bl_order_reminder(){
     if(isset($_POST['user_id'])){
         $date = date('Y-m-d H:i:s',strtotime(str_replace('/','-',$_POST['date']).' '.$_POST['hour'].':'.$_POST['min']));
-        echo BLReminder::setReminder($_POST['id'],$date);
+        $id = BLReminder::setReminder($_POST['id'],$date);
+        if(!$id) die;
+        $notification = new BLNotification;
+        $notification->order_id = $id;
+        $notification->description = "Напоминание установлено на ".$_POST['date'].' '.$_POST['hour'].':'.$_POST['min']."!";
+        $notification->insert();
+        echo 1;
     }
     die;
 }
 
+function update_bl_order_reminder(){
+    if(isset($_POST['id'])){
+        $date = date('Y-m-d H:i:s',strtotime(str_replace('/','-',$_POST['date']).' '.$_POST['hour'].':'.$_POST['min']));
+        $id = BLReminder::updateReminder($_POST['id'],$date);
+        $notification = new BLNotification;
+        $notification->order_id = $_POST['id'];
+        $notification->description = "Напоминание Обновлено до ".$_POST['date'].' '.$_POST['hour'].':'.$_POST['min']."!";
+        $notification->insert();
+        echo $id;
+    }
+    die;
+}
+
+function delete_bl_order_reminder(){
+    if(isset($_POST['id'])){
+        $id = BLReminder::deleteReminder($_POST['id']);
+        $notification = new BLNotification;
+        $notification->order_id = $_POST['id'];
+        $notification->description = "Напоминание Удалено!";
+        $notification->insert();
+        echo $id;
+    }
+    die;
+}
 
 function bl_update_notification(){
     if(!isset($_POST['type'],$_POST['id']))
@@ -87,11 +127,15 @@ function bl_update_notification(){
 
     if($_POST['type'] == 'reminder'){
         BLReminder::updateReminderView($_POST['id']);
+    }
+    if($_POST['type'] == 'order'){
+        BLNotification::updateNotification($_POST['id']);
+    }
         $res['count'] = bl_user_notification($_POST['user_id']);
         $res['nots'] = bl_get_template_notification();
         echo json_encode($res);
         die;
-    }
+
 }
 
 function bl_service_autocomplete(){
@@ -105,5 +149,30 @@ function bl_service_autocomplete(){
 function bl_change_mark(){
     if(isset($_POST['id'],$_POST['mark']))
         BLOrder::changeMark($_POST['mark'],$_POST['id']);
+    die;
+}
+
+function bl_add_friend(){
+    if(isset($_POST['email'])){
+        $friend = new BLFriend;
+        $friend->email = $_POST['email'];
+
+        if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+            echo json_encode(array('errors' => 'Некорректный email!','message' => ''));
+            die;
+        }
+        if(email_exists($_POST['email']) || $friend->isExist()){
+            echo json_encode(array('errors' => 'Пользователь с таким email уже существует!','message' => ''));
+            die;
+        }
+
+        if($message = $friend->insert()){
+            echo json_encode(array('message' => 'Спасибо! Письмо успешно отправлено!','errors' => ''));
+            die;
+        }else{
+            echo json_encode(array('message' => '','errors' => 'Не получилось отправить письмо! Попробуйте позднее!'));
+            die;
+        }
+    }
     die;
 }

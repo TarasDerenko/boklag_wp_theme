@@ -1,11 +1,11 @@
 <?php
 /* Template Name: Profile */
 ?>
-<?php get_header('profile');?>
+<?php get_header('profile'); ?>
 <main class="main">
     <section class="personal-content-section">
         <h1 class="section-title">Личный кабинет</h1>
-        <?php if(isset($_GET['edit']) && $_GET['edit'] == 'true'): ?>
+        <?php if(isset($_GET['edit']) && $_GET['edit'] == 'true' && $_SERVER['REQUEST_METHOD'] != 'POST'): ?>
             <div class="edit-blok-info">
                 <p>
                     Изменения прошли успешно!
@@ -44,10 +44,33 @@
                             </div>
                         </div>
                         <div class="personal-form-row">
-                            <label for="">Пароль:</label>
                             <div class="personal-input-wrapper">
-                                <input type="password" placeholder="***********" name="user_pass">
-                                <div class="personal-complete"></div>
+                                <a class="change-password-button button"><span>Сменить Пароль</span></a>
+                            </div>
+                        </div>
+                        <div class="change-password-block">
+                            <?php if(!isset($boklag_user_meta['google_account'])):?>
+                            <div class="personal-form-row">
+                                <label for="">Пароль:</label>
+                                <div class="personal-input-wrapper">
+                                    <input type="password" placeholder="***********" name="user_pass">
+                                    <div class="personal-complete"></div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                            <div class="personal-form-row">
+                                <label for="">Новый Пароль:</label>
+                                <div class="personal-input-wrapper user-pwd">
+                                    <input type="password" placeholder="***********" name="user_new_pass">
+                                    <div class="personal-complete"></div>
+                                </div>
+                            </div>
+                            <div class="personal-form-row">
+                                <label for="">Повторить:</label>
+                                <div class="personal-input-wrapper user-pwd">
+                                    <input type="password" placeholder="***********" name="user_new_cop_pass">
+                                    <div class="personal-complete"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="personal-text">
@@ -61,8 +84,8 @@
                                 <div class="personal-connect-row">
                                     <label for="">Телефон:</label>
                                     <div class="personal-input-wrapper">
-                                        <input type="tel" value="<?php echo get_bl_user_data($boklag_user_meta,'user_tel')?>" name="user_tel">
-                                        <div class="personal-complete active"></div>
+                                        <input type="tel" placeholder="380" value="<?php echo get_bl_user_data($boklag_user_meta,'user_tel')?>" name="user_tel">
+                                        <div class="personal-complete <?=!empty(get_bl_user_data($boklag_user_meta,'user_tel'))  ? 'active' : ''?>"></div>
                                     </div>
                                 </div>
                             </div>
@@ -70,8 +93,11 @@
                                 <div class="personal-connect-row">
                                     <label for="">E-mail:</label>
                                     <div class="personal-input-wrapper">
-                                        <input type="email" value="<?php echo $boklag_user->user_email; ?>" name="user_email">
-                                        <div class="personal-complete"></div>
+                                        <input type="email" value="<?=isset($_POST['user_email']) ? $_POST['user_email'] : $boklag_user->user_email; ?>" name="user_email">
+                                        <div class="personal-complete <?=(filter_var($boklag_user->user_email, FILTER_VALIDATE_EMAIL))  ? 'active' : ''?>"></div>
+                                        <div class="text-error">
+                                            <?=isset($error_message['email']) ? $error_message['email'] : ''?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

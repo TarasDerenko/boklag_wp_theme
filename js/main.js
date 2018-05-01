@@ -341,7 +341,7 @@ function extendExecutorInfo() {
 
 $(document).ready(function() {
     // Magnific popups
-    $('[href="#login"], [href="#registration"], [href="#wallet"]').magnificPopup({
+    $('[href="#login"], [href="#registration"], [href="#wallet"],[href="#send-mail"]').magnificPopup({
         type: 'inline'
     });
 });

@@ -15,3 +15,5 @@ require_once(__DIR__ . '/classes/BLReminder.php');
 require_once(__DIR__ . '/classes/BLService.php');
 require_once(__DIR__ . '/classes/BoklagDB.php');
 require_once(__DIR__ . '/classes/CreditCard.php');
+require_once(__DIR__ . '/classes/BLNotification.php');
+require_once(__DIR__ . '/classes/BLFriend.php');

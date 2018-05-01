@@ -100,7 +100,7 @@
         <section class="make-order">
             <div class="container">
                 <h2 class="section-title left-decor-inverse">Сделай заказ сейчас и получи свой бонус</h2>
-                <a href="#" class="button"><span>Заказать услугу</span></a>
+                <a href="/orders/new/" class="button"><span>Заказать услугу</span></a>
             </div>
         </section>
         <section class="statistic">
@@ -141,11 +141,12 @@
         <section class="share">
             <div class="container">
                 <h2 class="section-title">Поделись ссылкой и заработай свой бонус</h2>
-                <a href="#" class="button"><span>Поделиться</span></a>
+                <a href="#send-mail" class="button"><span>Поделиться</span></a>
             </div>
         </section>
         <section class="calculator">
             <div class="container">
+                <h2 class="section-title">Калькулятор стоимости услуги</h2>
                   <?php echo do_shortcode('[contact-form-7 id="123" title="Контактная форма Кадькулятор"]')?>
             </div>
         </section>
@@ -198,4 +199,5 @@
         </section>
         <?php endif;?>
     </main>
+<?php get_template_part('template_parts/send','email')?>
 <?php get_footer();?>

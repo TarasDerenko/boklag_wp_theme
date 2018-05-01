@@ -14,7 +14,8 @@ function theme_name_scripts() {
 	wp_enqueue_script('boklag-jquery-ui', get_template_directory_uri().'/js/jquery-ui.min.js',array(),'1.0.0',true);
 	wp_enqueue_script('boklag-jquery-migrate-popup', get_template_directory_uri().'/js/jquery.magnific-popup.min.js',array(),'1.0.0',true);
 	wp_enqueue_script('boklag-main', get_template_directory_uri().'/js/main.js', array(),'1.0.0',true);
-	if(isset($_GET['orders_page']) && $_GET['orders_page'] == 'new' || is_page('orders')){
+	$page = get_query_var('orders_page');
+	if(!empty($page) && $page == 'new' || is_page('orders')){
       wp_enqueue_script('boklag-google', "https://maps.googleapis.com/maps/api/js?key=AIzaSyCMz6ybbsM30th_jIWkEQMXNYMDCtU_j-k&libraries=places", array(),'1.0.0',true);
       wp_enqueue_script('boklag-map', get_template_directory_uri().'/js/map.js', array(),'1.0.0',true);
       wp_localize_script( 'boklag-map', 'wp_map',
@@ -24,10 +25,9 @@ function theme_name_scripts() {
           )
       );
   }
-  if(isset($_GET['orders_page']) && $_GET['orders_page'] == 'reminder'){
-      wp_enqueue_script('boklag-mask', get_template_directory_uri().'/js/jquery.mask.js', array(),'1.0.0',true);
-  }
-	wp_enqueue_script('boklag-script', get_template_directory_uri().'/js/script.js', array(),'1.0.0',true);
+
+  wp_enqueue_script('boklag-mask', get_template_directory_uri().'/js/jquery.mask.js', array(),'1.0.0',true);
+  wp_enqueue_script('boklag-script', get_template_directory_uri().'/js/script.js', array(),'1.0.0',true);
 	wp_enqueue_script('boklag-ajax', get_template_directory_uri().'/inc/js/wp-ajax.js', array(),'1.0.0',true);
 	wp_enqueue_script('boklag-recapcha','https://www.google.com/recaptcha/api.js');
 

@@ -62,10 +62,11 @@ function my_callback( $original_template ) {
 }
 
 function bl_active($par1,$par2,$class =''){
-    if($par1 == $par2)
+    var_dump($par1);
+    if(in_array($par2,explode('/',$par1)))
         echo 'class="active '.$class.'"';
     else
-        echo '';
+        echo $class;
 }
 
 function my_handle_attachment($file_handler,$post_id) {
@@ -81,6 +82,17 @@ function my_handle_attachment($file_handler,$post_id) {
 }
 
 function get_reminder_bell(){
+    global $order,$reminders;
+    $date = '';
+    $time_h = '';
+    $time_m = '';
+    $selected = false;
+    if(is_array($reminders) && key_exists($order->id,$reminders)){
+        $date = date('d/m/Y',strtotime($reminders[$order->id()]->remind_time));
+        $time_h = date('H',strtotime($reminders[$order->id()]->remind_time));
+        $time_m = date('i',strtotime($reminders[$order->id()]->remind_time));
+        $selected = true;
+    }
     ob_start(); ?>
     <div class="reminder-area">
         <button class="set-reminder-button">
@@ -93,16 +105,21 @@ function get_reminder_bell(){
                 <div class="reminder-form-row">
                     <div class="reminder-form-column">
                         <label for="">Дата</label>
-                        <input class="reminder-field-date" type="text" placeholder="10/11/017">
+                        <input class="reminder-field-date" type="text" placeholder="10/11/017" value="<?= $date ?>">
                     </div>
                     <div class="reminder-form-column">
                         <label for="">Время</label>
-                        <input class="reminder-field-time reminder-field-hour" type="text">
+                        <input class="reminder-field-time reminder-field-hour" type="text" value="<?= $time_h ?>">
                         <span class="reminder-time-dots">:</span>
-                        <input class="reminder-field-time reminder-field-min" type="text">
+                        <input class="reminder-field-time reminder-field-min" type="text"  value="<?= $time_m ?>">
                     </div>
                 </div>
-                <button type="submit" class="button button-invert"><span>Установить напоминание</span></button>
+                <?php if($selected): ?>
+                    <button type="submit" class="button button-update"><span>Обновить</span></button>
+                    <button class="button button-delete"><span>Удалить</span></button>
+                <?php else: ?>
+                    <button type="submit" class="button button-invert"><span>Установить напоминание</span></button>
+                <?php endif; ?>
             </form>
         </div>
     </div>

@@ -18,7 +18,7 @@
         <a href="/" class="header-logo"><img src="<?php bloginfo('template_url')?>/img/logo.png" alt="ФЛП Боклаг" width="263" height="79"></a>
         <nav class="personal-navigation">
             <ul class="personal-navigation-list">
-                <li><a href="/nachalo-raboti/" class="personal-dropdown-button personal-navigation-info"></a></li>
+                <li><a href="/orders/" class="personal-dropdown-button personal-navigation-info"></a></li>
                 <li><a href="#wallet" class="personal-dropdown-button personal-navigation-wallet"></a></li>
                 <li><a href="/sovety-i-otvety/" class="personal-dropdown-button personal-navigation-question"></a></li>
                 <li>

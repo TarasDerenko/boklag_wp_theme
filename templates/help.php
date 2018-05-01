@@ -3,7 +3,6 @@
 ?>
 <?php get_header('help')?>
   <main class="main">
-       <?php get_search_form();?>
         <?php if(have_posts()): the_post(); ?>
         <section class="help-categories">
             <div class="container">
@@ -35,6 +34,7 @@
                 </div>
             </div>
         </section>
+            <?php get_search_form();?>
         <section class="help-content">
             <div class="container">
                 <h2 class="section-title"><?php the_title();?></h2>

@@ -6,11 +6,15 @@ class BLReminder
 
     public static function setReminder($order_id,$date){
         global $wpdb;
-        return $wpdb->insert(self::TABLE_NAME,array(
+        $res = $wpdb->insert(self::TABLE_NAME,array(
             'order_id' => $order_id,
             'remind_time' => $date
         ));
+        if($res)
+            return $wpdb->insert_id;
+        return false;
     }
+
 
     public static function getReminderByID($ids){
         global $wpdb;
@@ -109,5 +113,21 @@ class BLReminder
     public static function updateReminderView($id){
         global $wpdb;
         return $wpdb->update(self::TABLE_NAME,['is_view' => 1],['id' => $id]);
+    }
+
+    public static function updateReminder($id,$date){
+        global $wpdb;
+        $res = $wpdb->update(self::TABLE_NAME,['remind_time' => $date,'is_view' => 0],['order_id' => $id]);
+        if($res !== false)
+            return 1;
+        return false;
+    }
+
+    public static function deleteReminder($id){
+        global $wpdb;
+        $res = $wpdb->delete(self::TABLE_NAME,['order_id' => $id]);
+        if($res != 0)
+            return 1;
+        return false;
     }
 }

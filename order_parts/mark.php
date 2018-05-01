@@ -30,7 +30,7 @@ $marks = BLOrder::get_mark();
                                 </thead>
                                 <tbody>
                                 <?php foreach($bl_orders as $order): ?>
-                                <tr>
+                                <tr class="order-info" data-id="<?php echo $order->id; ?>">
                                     <td><?php echo $order->id;?></td>
                                     <td><?php echo $order->title;?></td>
                                     <td><?php echo BLOrder::get_status($order->status);?></td>
@@ -51,6 +51,9 @@ $marks = BLOrder::get_mark();
                                             </div>
                                         </div>
                                     </td>
+                                </tr>
+                                <tr class="order-info-extend">
+                                    <?php get_template_part('order_parts/order','info');?>
                                 </tr>
                                 <?php endforeach;?>
                                 </tbody>

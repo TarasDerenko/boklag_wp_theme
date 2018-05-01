@@ -2,10 +2,10 @@
 <?php foreach ($notifications as $notification):?>
 <div class="notification-dropdown-item">
     <div class="notification-dropdown-image">
+        <img src="<?php bloginfo('template_url')?>/img/notification-image.jpg" alt="">
         <?php if(isset($notification['type']) && $notification['type'] == "reminder"):?>
-            <img src="<?php bloginfo('template_url')?>/img/notification-image.jpg" alt="">
+            <div class="notification-dropdown-bell"></div>
         <?php endif;?>
-        <div class="notification-dropdown-bell"></div>
     </div>
     <div class="notification-dropdown-info">
         <h3 class="notification-dropdown-title">

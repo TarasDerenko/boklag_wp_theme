@@ -1,8 +1,8 @@
 google.maps.event.addDomListener(window, 'load', init);
 var selecting = false;
-
+var mauseDown = 0;
 window.onkeydown = function(e) {
-    selecting = ((e.keyIdentifier == 'Control') || (e.ctrlKey == true));
+    selecting = ((e.keyIdentifier == 'Shift') || (e.shiftKey == true));
     if(marker)
         marker.setOptions({draggable: false});
 };
@@ -90,24 +90,36 @@ function init(){
         inp_lng.value = this.position.lng();
     });
 
-    map.addListener('drag',function (e) {
-        if(selecting) {
+    google.maps.event.addListener(map,'mousemove',function (e) {
+       if(selecting) {
             map.setOptions({draggable: false});
-            if (circle)
-                circle.setMap(null);
-            rang = Math.sqrt(Math.pow((marker.position.lat() - e.latLng.lat()), 2) + Math.pow((marker.position.lng() - e.latLng.lng()), 2));
-            if (zoom < 16)
-                rang = rang * 1000 / zoom;
-            else
-                rang = rang * 100;
-            circle = getCircle(rang, marker.position, map);
-            inp_rang.value = rang;
+            if(mauseDown) {
+                if (circle)
+                    circle.setMap(null);
+                rang = Math.sqrt(Math.pow((marker.position.lat() - e.latLng.lat()), 2) + Math.pow((marker.position.lng() - e.latLng.lng()), 2));
+                if (zoom < 16)
+                    rang = rang * 1000 / zoom;
+                else
+                    rang = rang * 100;
+                circle = getCircle(rang, marker.position, map);
+                inp_rang.value = rang;
+            }
         }
+    });
+
+    google.maps.event.addListener(map,'mouseup',function (e) {
+        mauseDown = 0;
+        map.setOptions({draggable: true});
+    });
+
+    google.maps.event.addListener(map,'mousedown',function (e) {
+        mauseDown = 1;
     });
 
     map.addListener('zoom_changed',function (e) {
         zoom = this.zoom;
     });
+
 
 
 }

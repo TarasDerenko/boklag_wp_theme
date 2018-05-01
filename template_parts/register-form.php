@@ -1,6 +1,4 @@
-<?php global $error_message,$register_info;
-debug($register_info);
-?>
+<?php global $error_message,$register_info;?>
 <div class="popup mfp-hide" id="registration">
     <?php if(sizeof($register_info)):?>
         <div class="popup-form-input info">

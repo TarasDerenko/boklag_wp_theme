@@ -40,7 +40,7 @@
                             <div class="new-order-time">
                                 <label for="">Срок выполнения услуги:</label>
                                 <div class="order-time-row">
-                                    <input type="date" name="date_end">
+                                    <input type="text" name="date_end" id="order-date-end" placeholder="дд/мм/гггг">
                                     <a href="#" class="button button-invert"><span>Интересные варианты</span></a>
                                 </div>
                                 <div class="order-time-row">
@@ -142,6 +142,10 @@
                                         </div>
                                     </div>
                                     <div class="location-form-row">
+                                        <label for="">Площадь кв.м.:</label>
+                                        <input type="text" name="area">
+                                    </div>
+                                    <div class="location-form-row">
                                         <label for="">Местоположение:</label>
                                         <select name="location">
                                             <option value="1">Киев</option>
@@ -176,7 +180,7 @@
                                         <span>Прикрепить документ</span>
                                         <input type="file" name="order_file[]" multiple>
                                     </label>
-                                    <div class="attach-button-description">*Максимальньный размер файла <?php echo wp_max_upload_size();?> МБ</div>
+                                    <div class="attach-button-description">*Максимальньный размер файла <?php echo round(wp_max_upload_size()/1024/1024,2);?> МБ</div>
                                 </div>
                             </div>
                             <div class="new-order-buttons">

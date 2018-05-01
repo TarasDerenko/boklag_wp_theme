@@ -68,6 +68,7 @@ class BLOrder
     public $date_change;
     public $date_create;
 
+
     public function __construct(){
 
     }
@@ -151,7 +152,10 @@ class BLOrder
         $this->user_id = get_current_user_id();
         $this->date_change = date('Y-m-d H:i:s');
         $fields = $this->get_update_fields();
-        return $wpdb->insert(self::TABLE_NAME,$fields);
+        $res = $wpdb->insert(self::TABLE_NAME,$fields);
+        if($res)
+            return $wpdb->insert_id;
+        return false;
 
     }
 
@@ -186,6 +190,13 @@ class BLOrder
 
     public static function find($paged = 1,$limit = null, $type = null, $mark = null,$is_user = true){
         global $wpdb;
+        $search = '';
+
+        if(isset($_GET['sp']) && strpos($_SERVER['REQUEST_URI'],'search') !== false){
+            $like = '%'.$_GET['sp'].'%';
+            $search = $wpdb->prepare( "AND id LIKE %s OR title LIKE %s OR description LIKE %s OR street LIKE %s", array_fill(0,4,$like));
+        }
+
         $str = '';
         $query_var = get_query_var( 'orders_page' );
 
@@ -201,7 +212,7 @@ class BLOrder
         if($is_user){
             $user = wp_get_current_user();
             if($user->exists()){
-                $str .= "WHERE `user_id` = {$user->ID} ";
+                $str .= $wpdb->prepare("WHERE `user_id` = %d ",$user->ID);
             }
         }
         if(!$limit)
@@ -209,22 +220,25 @@ class BLOrder
         $offset = ($paged - 1) * $limit;
 
         if($type && $type > 0)
-            $str .= "AND `type` = $type ";
+            $str .= $wpdb->prepare("AND `type` = %d ",$type);
         if($type && $type < 0)
-            $str .= "AND `type` != ".abs($type)." ";
+            $str .= $wpdb->prepare("AND `type` != %d ",abs($type));
         if($mark)
-            $str .= "AND `mark` = $mark ";
+            $str .= $wpdb->prepare("AND `mark` = %d ",$mark);
 
-
-        $query = $wpdb->prepare("SELECT * FROM ".self::TABLE_NAME." ".$str." ORDER BY id DESC LIMIT %d OFFSET %d",array($limit,$offset));
+        $q = "SELECT * FROM ".self::TABLE_NAME." ".$str.$search;
+        wp_cache_set('order_query',$q);
+        wp_cache_set('order_limit',$limit);
+        wp_cache_set('order_paged',$paged);
+        $query = $wpdb->prepare($q." ORDER BY id DESC LIMIT %d OFFSET %d",array($limit,$offset));
         $results = $wpdb->get_results($query);
 
         return self::parse_all_results($results);
     }
 
-    public static function pagination($paged = 1,$limit = null,$type = null, $mark = null,$is_user = true){
-
+    public static function filter($param = array()){
         global $wpdb;
+        $str = '';
         $query_var = get_query_var( 'orders_page' );
 
         if(!empty($query_var)){
@@ -234,29 +248,45 @@ class BLOrder
             else if(isset($query_arr[1]) && is_numeric($query_arr[1]))
                 $paged = $query_arr[1];
             else
-                $paged = $paged;
+                $paged = 1;
         }
+        if( $user = wp_get_current_user()){
+            if($user->exists()){
+                $str .= $wpdb->prepare("WHERE `user_id` = %d ",$user->ID);
+            }
+        }
+
+        $limit = get_option('bl-limit');
+
+        $offset = ($paged - 1) * $limit;
+        $str .= (isset($param['type'])) ? $wpdb->prepare("AND `type` in(".implode(',',array_fill(0, count($param['type']),'%d')).") ",$param['type']) : '';
+        $str .= (isset($param['mark'])) ? $wpdb->prepare("AND `mark` > %d ",1) : '';
+        $str .= (isset($param['title']) && !empty(trim($param['title']))) ? $wpdb->prepare("AND `title` like %s ",'%'.$param['title'].'%') : '';
+        $str .= (isset($param['date-end']) && !empty(trim($param['date-end']))) ? $wpdb->prepare("AND `date_end` = %s ",date('Y-m-d',strtotime(str_replace('/','-',$param['date-end'])))) : '';
+        $q = "SELECT * FROM ".self::TABLE_NAME." ".$str;
+        wp_cache_set('order_query',$q);
+        wp_cache_set('order_limit',$limit);
+        wp_cache_set('order_paged',$paged);
+        $query = $wpdb->prepare($q." ORDER BY id DESC LIMIT %d OFFSET %d",array($limit,$offset));
+        $results = $wpdb->get_results($query);
+
+        return self::parse_all_results($results);
+    }
+
+    public static function pagination(){
+
+        global $wpdb;
+        $query = wp_cache_get('order_query');
+        $limit = wp_cache_get('order_limit');
+        $paged = wp_cache_get('order_paged');
+
         $args = array(
             'paged' => $paged,
             'limit' => ($limit) ? $limit : get_option('bl-limit'),
         );
 
-
-
-        $str = '';
-        if($is_user){
-            $user = wp_get_current_user();
-            if($user->exists()){
-                $str .= "WHERE `user_id` = {$user->ID} ";
-            }
-        }
-        if($type)
-            $str .= "AND `type` = $type ";
-        if($mark)
-            $str .= "AND `mark` = $mark ";
-
-
-        $total = $wpdb->get_results('SELECT count(*) AS count FROM '.self::TABLE_NAME.' '.$str);
+        $query = str_replace('*','COUNT(*) AS count',$query);
+        $total = $wpdb->get_results($query);
         if(!isset($total[0]->count))
             return;
         $total = $total[0]->count;
@@ -337,9 +367,5 @@ class BLOrder
             return $wpdb->query("UPDATE ".self::TABLE_NAME." SET `mark` = $mark WHERE id IN(".implode(',',$ids).")" );
         return $wpdb->update(self::TABLE_NAME,array('mark' => $mark),array('id' => $ids));
     }
+
 }
-
-
-//$order = BLOrder::findOne(1);
-//$order->title = 'title 9';
-//$order->update();

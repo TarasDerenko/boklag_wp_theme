@@ -4,7 +4,6 @@ $('.personal-content-photo .button-delete').click(function(){
 });
 
 function readURL(input) {
-
   if (input.files && input.files[0]) {
     var reader = new FileReader();
 
@@ -44,6 +43,14 @@ function checkPasswordStrength(pass,input) {
 
 }
 
+function checkPasswordCopy(inp1,inp2) {
+    if(inp1.val() !== inp2.val()){
+       return false;
+    }else{
+       return true;
+    }
+}
+
 
 function valid_pass(pass){
 	if(!pass)
@@ -75,6 +82,26 @@ function hasSymbolCase(str) {
 
 $('#registration [name=pwd]').on('input',function(){
 	checkPasswordStrength($(this).val(),this);
+});
+
+$('[name=user_new_pass]').on('input',function () {
+    var comp = $(this).siblings('.personal-complete');
+    if(valid_pass($(this).val()) > 1){
+        if(!comp.hasClass('active'))
+            comp.addClass('active');
+    }else{
+        comp.removeClass('active');
+    }
+});
+
+$('[name=user_new_cop_pass]').on('input',function () {
+    var comp = $(this).siblings('.personal-complete');
+    if(checkPasswordCopy($('[name=user_new_pass]'),$(this))){
+        if(!comp.hasClass('active'))
+            comp.addClass('active');
+    }else{
+        comp.removeClass('active');
+    }
 });
 
 $(".wpcf7").on('wpcf7:mailfailed', function(event){
@@ -291,5 +318,63 @@ function initMap(id) {
 
     marker = new google.maps.Marker(markerOptions);
     circle = getCircle($(mapElement).attr('data-rang'),marker.position,map);
-
 }
+
+var userTel = $('[name=user_tel]');
+
+if(!!userTel.mask){
+    userTel.mask('00 (000) 000-00-00');
+}else{
+    userTel.on('input',function () {
+        var val = $(this).val();
+        if(!/^\d+$/.test(val) || val.length > 12){
+            $(this).val(val.substring(0,val.length - 1));
+        }
+        return;
+    });
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+$('[name=user_email]').on('input',function () {
+    var email = $(this);
+    complete = email.siblings('.personal-complete');
+    if(validateEmail(email.val())){
+        if(!complete.hasClass('active'))
+            complete.addClass('active');
+    }else{
+        complete.removeClass('active');
+    }
+});
+
+userTel.on('input',function () {
+    var comp = $(this).siblings('.personal-complete');
+    if($(this).val().length > 17){
+        if(!comp.hasClass('active'))
+            comp.addClass('active');
+    }else{
+        comp.removeClass('active');
+    }
+});
+
+$('.change-password-button').click(function () {
+    $('.change-password-block').toggleClass('active');
+});
+
+// $('.order-info td:last-child').click(function (event) {
+//    event.stopPropagation();
+// });
+
+$('#order-date-end').datepicker({
+    changeYear: false,
+    /*showOtherMonths: true,*/
+    dateFormat: "dd/mm/yy",
+    dayNamesMin: ["Н", "П", "В", "С", "Ч", "П", "С"],
+    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+});
+$('#order-date-end').on('input',function (){
+    $(this).val('');
+});

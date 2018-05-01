@@ -96,9 +96,7 @@ wp_reset_query(); ?>
 <div class="about-news-add">
     <a href="#">Показать еще 3</a>
 </div>
-<?php endif; ?>
-
-<?php
+<?php endif;
 }
 add_action('show_loop_news','loop_news');
 /*
@@ -139,7 +137,7 @@ function boklag_registration(){
                 'user_password' => $_POST['pwd'],
             ));
             if( !is_wp_error($user_login) ){
-                wp_redirect(home_url());
+                wp_redirect(home_url('/kabinet'));
                 die;
             }else{
                 $error_message['login'] = $user_login->get_error_message();
@@ -196,7 +194,7 @@ function boklag_login(){
         ));
 
         if( !is_wp_error($user_login) ){
-            wp_redirect(home_url());
+            wp_redirect(home_url('/kabinet'));
             die;
         }else{
             $error_login['login'] = 'Неправельный логин или пароль!';
@@ -277,7 +275,7 @@ function show_popup_login(){  ?>
 function checked_user_login(){
     global $boklag_user,$boklag_user_meta,$boklag_user_avatar;
     if(!is_user_logged_in() && !wp_get_current_user()->exists()){
-        wp_redirect(site_url('?reg=false'));
+        wp_redirect(site_url('?login=failed'));
         die;
     }
     $boklag_user = wp_get_current_user();
@@ -322,8 +320,12 @@ add_action('wp_head','add_google_sign_in_script');
  *
  * */
 function edit_boklag_profile(){
-    global $boklag_user,$error_message;
+    global $boklag_user,$error_message,$boklag_user_meta;
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit-profile'])){
+        if(isset( $_POST['user_email']) && !filter_var( $_POST['user_email'],FILTER_VALIDATE_EMAIL)){
+            $error_message['email'] = 'Не валидный Email!';
+            return false;
+        }
         if(!empty($_POST['delete-avatar'])){
             wp_delete_attachment( $_POST['delete-avatar'], true );
             $_POST['user_avatar'] = '';
@@ -338,8 +340,23 @@ function edit_boklag_profile(){
             }
             $_POST['user_avatar'] = $image_id;
         }
-        if(empty(trim($_POST['user_pass'])))
-            unset($_POST['user_pass']);
+        if(!empty(trim($_POST['user_new_pass'])) && !empty(trim($_POST['user_new_cop_pass']))){
+            if($_POST['user_new_pass'] > 5 && $_POST['user_new_pass'] == $_POST['user_new_cop_pass']){
+                if(isset($boklag_user_meta['google_account'])){
+                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
+                    delete_user_meta($boklag_user->ID,'google_account');
+                }else if(!empty(trim($_POST['user_pass'])) && wp_check_password($_POST['user_pass'] , $boklag_user->user_pass )){
+                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
+                }else{
+                    $error_message['pass'] = 'Не удалось изминить пароль';
+                }
+            }else{
+                $error_message['pass'] = 'Не удалось изминить пароль';
+            }
+
+        }
+        unset($_POST['user_pass']);
+
         $user_id = wp_update_user(array(
             'ID' => $boklag_user->ID,
             'user_email' =>  $_POST['user_email'],
@@ -488,7 +505,12 @@ function create_new_bl_orders(){
             }
             $order->document = serialize($document);
         }
-        if($order->insert()){
+        if($order_id = $order->insert()){
+            $notification = new BLNotification;
+            $notification->order_id = $order_id;
+            $notification->description = "Вы создали новый заказ №".$order_id."!";
+            $notification->insert();
+            unset($notification);
             wp_redirect(site_url('/orders/new/?order=send'));
             die;
         }else{
@@ -507,13 +529,17 @@ function init_bl_orders($type = null,$mark = null){
 }
 add_action('start_orders','init_bl_orders',10,2);
 
+function init_bl_orders_filter($type = null,$mark = null){
+    global $bl_orders;
+    $bl_orders = BLOrder::filter($_GET);
+}
+add_action('start_orders_filter','init_bl_orders_filter',10,2);
+
 function end_blorders(){
     global $bl_orders;
     unset($bl_orders);
 }
 add_action('end_orders','end_blorders');
-
-
 
 function bl_send_mail(){
     global $mail_error;
@@ -553,10 +579,29 @@ add_action('pre_get_posts','search_in_faq');
 
 function bl_delete_orders(){
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['del'])){
-        if(isset($_POST['del-but']))
-            BLOrder::delete($_POST['del']);
-        if(isset($_POST['archive']))
-            BLOrder::changeType(BLOrder::TYPE_ARCHIVE,$_POST['del']);
+        if(isset($_POST['del-but'])){
+            if(BLOrder::delete($_POST['del'])){
+                foreach ($_POST['del'] as $order_id){
+                    $notification = new BLNotification;
+                    $notification->order_id = $order_id;
+                    $notification->description = "Удаление заказа №".$order_id."  прошло успешно!";
+                    $notification->insert();
+                    unset($notification);
+                }
+            }
+
+        }
+        if(isset($_POST['archive'])){
+            if(BLOrder::changeType(BLOrder::TYPE_ARCHIVE,$_POST['del'])){
+                foreach ($_POST['del'] as $order_id){
+                    $notification = new BLNotification;
+                    $notification->order_id = $order_id;
+                    $notification->description = "Перемищение в архив заказа №".$order_id." прошло успешно!";
+                    $notification->insert();
+                    unset($notification);
+                }
+            }
+        }
 
         wp_redirect($_SERVER['REQUEST_URI']);
         die;
@@ -566,8 +611,8 @@ add_action('init','bl_delete_orders');
 
 function get_reminder_in_reminder_page($arf){
     global $bl_orders,$reminders;
-    $query_var = get_query_var( 'orders_page' );
-    if(!empty($query_var) && $query_var == 'reminder'){
+
+    if(strpos($_SERVER['REQUEST_URI'],'reminder') !== false){
         $reminders = array();
         $reminder = BLReminder::getReminderByID(array_map(function ($el){
             return $el->id();
@@ -589,8 +634,14 @@ function bl_user_notification($user_id = false){
 
     $notifications = array();
     $el = array();
+
     $notification_count += BLReminder::getReminderCountViewsByUser($user_id);
     $reminders_notification = BLReminder::getReminderViewsByUser( $user_id );
+
+    $order_notification = BLNotification::getNewNotificationsByUser($user_id);
+    $notification_count += BLNotification::getNewNotificationsCountByUser($user_id);
+
+
 
     foreach ($reminders_notification as $not){
         $el['type'] = 'reminder';
@@ -602,6 +653,19 @@ function bl_user_notification($user_id = false){
         $el['remind_time'] = $not->remind_time;
         $el['date_end'] = $not->date_end;
         $notifications[] = $el;
+        $el = array();
+    }
+    foreach ($order_notification as $o_not){
+        $el['type'] = 'order';
+        $el['id'] = $o_not->id;
+        $el['order_id'] = $o_not->order_id;
+        $el['title'] = $o_not->title;
+        $el['description'] = $o_not->description;
+        $el['status'] = $o_not->status;
+        $el['remind_time'] = null;
+        $el['date_end'] = $o_not->date_end;
+        $notifications[] = $el;
+        $el = array();
     }
     return $notification_count;
 }
@@ -620,3 +684,18 @@ function bl_get_template_notification($echo = false){
         return $content;
 }
 add_action('get_template_notification','bl_get_template_notification');
+
+/*
+ *
+ *
+ * @checked if user login
+ *
+ *
+ * */
+function checked_user_front_login(){
+    if(is_user_logged_in() && is_front_page()){
+        wp_redirect(site_url('/kabinet/'));
+        die;
+    }
+}
+add_action('wp','checked_user_front_login');

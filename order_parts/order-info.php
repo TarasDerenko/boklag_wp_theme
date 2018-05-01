@@ -7,18 +7,18 @@ global $order;
         <div class="order-detailed-info">
             <div class="detailed-info-row">
                 <div class="detailed-info-label">
-                    Краткое описание:
+                    Целевое использование:
                 </div>
                 <div class="detailed-info-value">
-                    <?=$order->description;?>
+                    <?=$order->title;?>
                 </div>
             </div>
             <div class="detailed-info-row">
                 <div class="detailed-info-label">
-                    Целевое использование:
+                    Краткое описание:
                 </div>
                 <div class="detailed-info-value">
-                    для строительства жилого дома
+                    <?=$order->description;?>
                 </div>
             </div>
             <div class="detailed-info-row">

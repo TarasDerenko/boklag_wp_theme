@@ -11,11 +11,12 @@
                 <div class="side-menu">
                    <?php get_sidebar('profile')?>
                 </div>
+                <?php do_action('start_orders',BLOrder::TYPE_OPEN)?>
                 <div class="main-content">
                     <div class="archive-search">
                         <form>
                             <div class="archive-search-wrapper">
-                                <input class="archive-search-input" type="text" placeholder="Введити номер, название или искомое слово...">
+                                <input class="archive-search-input" type="text" name="sp" value="<?=isset($_GET['sp']) ? $_GET['sp'] : ''?>" placeholder="Введити номер, название или искомое слово...">
                                 <button class="archive-search-button" type="submit"></button>
                             </div>
                         </form>
@@ -23,6 +24,7 @@
                     <div class="archive-content">
                         <div class="content-table">
                             <table>
+                                <thead>
                                 <tr>
                                     <th>N<br> договора</th>
                                     <th>Вид работы</th>
@@ -30,59 +32,27 @@
                                     <th>Адрес объекта</th>
                                     <th>Дата окончания<br> работ</th>
                                 </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
+                                </thead>
+                                <tbody>
+                                <?php foreach($bl_orders as $order): ?>
+                                <tr class="order-info" data-id="<?php echo $order->id; ?>">
+                                    <td><?php echo $order->id();?></td>
+                                    <td><?php echo $order->title;?></td>
+                                    <td><?php echo BLOrder::get_status($order->status);?></td>
+                                    <td><?php echo $order->street.' '.$order->house;?></td>
+                                    <td><?php echo $order->date_end;?></td>
                                 </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
+                                <tr class="order-info-extend">
+                                    <?php get_template_part('order_parts/order','info');?>
                                 </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
-                                </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
-                                </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
-                                </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
-                                </tr>
-                                <tr>
-                                    <td>1211</td>
-                                    <td>ТД по установлению границ участка в натуре</td>
-                                    <td>выполнено</td>
-                                    <td>м.Запорожье ул. Леваневского, 4</td>
-                                    <td>12.01.2017</td>
-                                </tr>
+                                <?php endforeach; ?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
+                    <div class="order-pagination"><?php echo BLOrder::pagination(1,null,BLOrder::TYPE_OPEN);?></div>
                 </div>
+                <?php do_action('end_orders')?>
             </div>
         </div>
     </section>

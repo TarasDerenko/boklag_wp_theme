@@ -141,6 +141,82 @@
 .edit-blok-info p{
 	transform: skewX(-14deg);
 }
+.search-word{
+	color: green;
+}
+#send-mail .info.error{
+	color: red;
+}
+.personal-input-wrapper{
+	position: relative;
+}
+.text-error{
+	position: absolute;
+	top: calc(100% + 5px);
+	font-size: 14px;
+	color: red;
+	text-align: center;
+	right: 0;
+	left: 0;
+}
+.user-pwd::after{
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -10px;
+	height: 5px;
+	transition: width .5s;
+}
+.user-pwd.bad:after {
+	background-color: red;
+	width: 20%;
+}
+.user-pwd.normal:after {
+	background-color: yellow;
+	width: 40%;
+}
+.user-pwd.good:after{
+	background-color: yellow;
+	width: 65%;
+}
+.user-pwd.strong:after {
+	background-color: green;
+	width: 100%;
+}
+.user-pwd.bad-copy:after {
+	background-color: red;
+	width: 20%;
+}
+.personal-form-row .change-password-button{
+	font-size: 16px;
+	padding: 15px;
+	max-width: 200px;
+	margin-left: 0;
+}
+.change-password-block{
+	overflow: hidden;
+	height: 0;
+	transition: height .3s;
+}
+.change-password-block.active{
+	height: 185px;
+}
+.selected .set-reminder-button path {
+	fill: #8dc63f;
+}
+.reminder-form .button-update,.reminder-form .button-delete{
+	width: 110px;
+	float: left;
+	margin: 0 10px;
+}
+.reminder-form .button-delete{
+	background-color: #e05252;
+}
+#order-date-end{
+	background-image: url(img/icon-calendar.png);
+	background-repeat: no-repeat;
+	background-position: right 5px center;
+}
 @media (max-width: 991px){
 	.help-container p, .help-container ul, .help-container ol{
 		padding-left: 30px;
