@@ -11,7 +11,7 @@
                 <div class="side-menu">
                     <?php get_sidebar('profile')?>
                 </div>
-                <?php do_action('start_orders',-BLOrder::TYPE_ARCHIVE)?>
+                <?php do_action('start_orders',BLOrder::TYPE_OPEN)?>
                 <div class="main-content">
                     <div class="archive-content">
                         <form  method="post">

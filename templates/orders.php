@@ -14,7 +14,7 @@
                 <div class="side-menu">
                     <?php get_sidebar('profile');?>
                 </div>
-                <?php do_action('start_orders')?>
+                <?php do_action('start_orders',BLOrder::TYPE_OPEN)?>
                 <div class="main-content">
                     <div class="archive-content">
                         <?php get_template_part('order_parts/orders','loop')?>

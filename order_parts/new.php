@@ -89,14 +89,14 @@
                                         <label for="">Площадь кв.м.:</label>
                                         <input type="text" name="area">
                                     </div>
-                                    <div class="location-form-row">
+                                    <!--<div class="location-form-row">
                                         <label for="">Местоположение:</label>
                                         <select name="location">
                                             <option value="1">Киев</option>
                                             <option value="2">Винница</option>
                                             <option value="3">Львов</option>
                                         </select>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="order-location-map">
                                     <div class="location-map" id="map"></div>

@@ -75,8 +75,8 @@ if(empty($order_page) || $page[0] == 'page' || empty($page[0]))
             </svg>
         </a>
     </li>
-    <li <?php bl_active($order_page,'orders')?>>
-        <a class="side-menu-icon" href="/orders/">
+    <li <?php bl_active($order_page,'delete-archive')?>>
+        <a class="side-menu-icon" href="/orders/delete-archive">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22">
                 <path d="M386.457,831.636h-3.465a3.016,3.016,0,0,0-5.984,0h-3.465A2.531,2.531,0,0,0,371,834.149v0.129a2.516,2.516,0,0,0,1.607,2.335v11.874A2.532,2.532,0,0,0,375.15,851h9.7a2.532,2.532,0,0,0,2.543-2.513V836.613A2.516,2.516,0,0,0,389,834.278v-0.129A2.531,2.531,0,0,0,386.457,831.636ZM380,830.192a1.806,1.806,0,0,1,1.774,1.444h-3.547A1.8,1.8,0,0,1,380,830.192Zm6.187,18.295a1.331,1.331,0,0,1-1.337,1.321h-9.7a1.331,1.331,0,0,1-1.337-1.321V836.792h12.374v11.695Zm1.607-14.209a1.331,1.331,0,0,1-1.337,1.322H373.543a1.331,1.331,0,0,1-1.337-1.322v-0.129a1.331,1.331,0,0,1,1.337-1.321h12.914a1.331,1.331,0,0,1,1.337,1.321v0.129Zm-11.027,14.006a0.6,0.6,0,0,0,.6-0.6v-6.711a0.6,0.6,0,0,0-1.206,0v6.711A0.6,0.6,0,0,0,376.767,848.284Zm3.233,0a0.6,0.6,0,0,0,.6-0.6v-6.711a0.6,0.6,0,0,0-1.206,0v6.711A0.6,0.6,0,0,0,380,848.284Zm3.233,0a0.6,0.6,0,0,0,.6-0.6v-6.711a0.6,0.6,0,0,0-1.206,0v6.711A0.6,0.6,0,0,0,383.233,848.284Z" transform="translate(-371 -829)"/>
             </svg>
@@ -115,9 +115,9 @@ if(empty($order_page) || $page[0] == 'page' || empty($page[0]))
     <li <?php bl_active($order_page,'mark')?>><a class="side-menu-link" href="/orders/mark">Пометить заказ</a></li>
     <li <?php bl_active($order_page,'filter')?>><a class="side-menu-link" href="/orders/filter/">Фильтр</a></li>
     <li <?php bl_active($order_page,'search')?>><a class="side-menu-link" href="/orders/search/">Поиск</a></li>
-    <li <?php bl_active($order_page,'orders')?>><a class="side-menu-link" href="/orders/">Очистить</a></li>
+    <li <?php bl_active($order_page,'delete-archive')?>><a class="side-menu-link" href="/orders/delete-archive">Очистить</a></li>
     <li <?php bl_active($order_page,'calc')?>><a class="side-menu-link" href="/orders/calculate/">Калькулятор</a></li>
-    <li <?php bl_active($order_page,'se')?>><a class="side-menu-link" href="#">Поиск исполнителя</a></li>
+    <li <?php bl_active($order_page,'executor')?>><a class="side-menu-link" href="#">Поиск исполнителя</a></li>
     <li <?php bl_active($order_page,'control')?>><a class="side-menu-link" href="/orders/control/">Контроль сроков</a></li>
 </ul>
 <button type="button" class="side-menu-extend"></button>

@@ -27,9 +27,9 @@ class BLOrder
      * */
 
     const TYPE_OPEN     = 1;
-    const TYPE_MARK     = 2;
+    const TYPE_DRAFT    = 2;
     const TYPE_ARCHIVE  = 3;
-    const TYPE_DRAFT    = 4;
+    const TYPE_DELETED  = 4;
 
     const MARK_WHITE    = 1;
     const MARK_ORANGE   = 2;

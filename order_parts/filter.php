@@ -74,7 +74,7 @@ get_header('profile')?>
                                 </label>
                                 <label class="custom-checkbox">
                                     <span class="custom-checkbox-text">Помеченные договоры</span>
-                                    <input type="checkbox"  name="mark" value="<?=BLOrder::TYPE_MARK?>" <?=(isset($_GET['mark'])) ? 'checked="checked"': ''?>>
+                                    <input type="checkbox"  name="mark" value="" <?=(isset($_GET['mark'])) ? 'checked="checked"': ''?>>
                                     <div class="custom-checkbox-image2"></div>
                                 </label>
                             </div>

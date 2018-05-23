@@ -608,11 +608,11 @@ add_action('pre_get_posts','search_in_faq');
 function bl_delete_orders(){
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['del'])){
         if(isset($_POST['del-but'])){
-            if(BLOrder::delete($_POST['del'])){
+            if(BLOrder::changeType(BLOrder::TYPE_DELETED,$_POST['del'])){
                 foreach ($_POST['del'] as $order_id){
                     $notification = new BLNotification;
                     $notification->order_id = $order_id;
-                    $notification->description = "Удаление заказа №".$order_id."  прошло успешно!";
+                    $notification->description = "Перемищение в удаленные заказа №".$order_id."  прошло успешно!";
                     $notification->insert();
                     unset($notification);
                 }
@@ -630,7 +630,28 @@ function bl_delete_orders(){
                 }
             }
         }
-
+        if(isset($_POST['restore-but'])){
+            if(BLOrder::changeType(BLOrder::TYPE_OPEN,$_POST['del'])){
+                foreach ($_POST['del'] as $order_id){
+                    $notification = new BLNotification;
+                    $notification->order_id = $order_id;
+                    $notification->description = "Заказа №".$order_id." успешно перемищено в мои закази!";
+                    $notification->insert();
+                    unset($notification);
+                }
+            }
+        }
+        if(isset($_POST['delete-but'])){
+            if(BLOrder::delete($_POST['del'])){
+                foreach ($_POST['del'] as $order_id){
+                    $notification = new BLNotification;
+                    $notification->order_id = $order_id;
+                    $notification->description = "Заказ №".$order_id." успешно удален!";
+                    $notification->insert();
+                    unset($notification);
+                }
+            }
+        }
         wp_redirect($_SERVER['REQUEST_URI']);
         die;
     }
