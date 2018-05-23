@@ -321,6 +321,48 @@ add_action('wp_head','add_google_sign_in_script');
  * */
 function edit_boklag_profile(){
     global $boklag_user,$error_message,$boklag_user_meta;
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['change-pass'])){
+        if(!empty(trim($_POST['user_new_pass'])) && !empty(trim($_POST['user_new_cop_pass']))){
+            if(strlen($_POST['user_new_pass']) > 5 && $_POST['user_new_pass'] == $_POST['user_new_cop_pass']){
+                if(isset($boklag_user_meta['google_account'])){
+                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
+                    delete_user_meta($boklag_user->ID,'google_account');
+                    wp_redirect(site_url('/kabinet/?edit=true'));
+                    die;
+                }else if(!empty(trim($_POST['user_pass'])) && wp_check_password($_POST['user_pass'] , $boklag_user->user_pass )){
+                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
+                    wp_redirect(site_url('/kabinet/?edit=true'));
+                    die;
+                }
+            }
+            $error_message['pass'] = 'Не удалось изминить пароль';
+        }
+    }
+    if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save-avatar'])){
+        if(isset($_FILES['user_image']['type']) && strpos($_FILES['user_image']['type'],'image') !== false){
+            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
+            require_once(ABSPATH . 'wp-admin/includes/media.php');
+            $image_id = media_handle_upload( 'user_image', 0);
+            if(is_object($image_id)){
+                $error_message['load_image'] = $image_id->get_error_message();
+            }
+            $_POST['user_avatar'] = $image_id;
+        }
+        if(!empty($_POST['delete-avatar'])){
+            wp_delete_attachment( $_POST['delete-avatar'], true );
+            $_POST['user_avatar'] = '';
+        }
+        $old_image = get_bl_user_data($boklag_user_meta,'user_avatar');
+        if(!empty($old_image))
+            wp_delete_attachment( $old_image, true );
+        $save = update_boklag_user_data($boklag_user->ID,$_POST);
+        if($save){
+            wp_redirect(site_url('/kabinet/?edit=true'));
+            die;
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit-profile'])){
         if(isset( $_POST['user_email']) && !filter_var( $_POST['user_email'],FILTER_VALIDATE_EMAIL)){
             $error_message['email'] = 'Не валидный Email!';
@@ -339,21 +381,6 @@ function edit_boklag_profile(){
                 $error_message['load_image'] = $image_id->get_error_message();
             }
             $_POST['user_avatar'] = $image_id;
-        }
-        if(!empty(trim($_POST['user_new_pass'])) && !empty(trim($_POST['user_new_cop_pass']))){
-            if($_POST['user_new_pass'] > 5 && $_POST['user_new_pass'] == $_POST['user_new_cop_pass']){
-                if(isset($boklag_user_meta['google_account'])){
-                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
-                    delete_user_meta($boklag_user->ID,'google_account');
-                }else if(!empty(trim($_POST['user_pass'])) && wp_check_password($_POST['user_pass'] , $boklag_user->user_pass )){
-                    wp_set_password($_POST['user_new_pass'],$boklag_user->ID);
-                }else{
-                    $error_message['pass'] = 'Не удалось изминить пароль';
-                }
-            }else{
-                $error_message['pass'] = 'Не удалось изминить пароль';
-            }
-
         }
         unset($_POST['user_pass']);
 
@@ -485,6 +512,7 @@ function create_new_bl_orders(){
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['new-order'])){
         $document = array();
         $order = new BLOrder();
+        $_POST['date_end'] = date('Y-m-d',strtotime(str_replace('/','-',$_POST['date_end'])));
         $order->load($_POST);
         if(!empty($_FILES['order_file'])){
             $files = $_FILES["order_file"];
@@ -694,7 +722,7 @@ add_action('get_template_notification','bl_get_template_notification');
  * */
 function checked_user_front_login(){
     if(is_user_logged_in() && is_front_page()){
-        wp_redirect(site_url('/kabinet/'));
+        wp_redirect(site_url('/orders/'));
         die;
     }
 }

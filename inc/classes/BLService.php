@@ -29,4 +29,16 @@ class BLService
             ");
     }
 
+    public static function getDocumentsById($id){
+        global $wpdb;
+        return $wpdb->get_results($wpdb->prepare(
+            "SELECT `d`.`title` 
+            FROM {$wpdb->prefix}bl_documents as d
+            LEFT JOIN {$wpdb->prefix}bl_services_relationship as r
+            ON (`r`.`document_id` = `d`.`id`)
+            WHERE `r`.`service_id` = %d
+            "
+        ,array($id)));
+    }
+
 }

@@ -107,8 +107,9 @@ function myCreateElement(tag,attr,text){
 }
 
 
-$('tbody').on('click','.button-invert',function(){
+$('.reminder-form').on('click','.button-invert',function(){
 	var tr = $(this).closest('tr');
+	var td = $(this).closest('td');
 	var order_id = tr.attr('data-id');
 	var date = tr.find('.reminder-field-date').val();
 	var hour = tr.find('.reminder-field-hour').val();
@@ -127,6 +128,16 @@ $('tbody').on('click','.button-invert',function(){
 		success:function(data){
 			if(data == 1){
 				$('.set-reminder-button,.reminder-form').removeClass('active');
+                td.find('.button-invert').remove();
+                var button_up = createElement('button',{type:'button',class:'button button-update'});
+                var spa_up = createElement('span',{},'Обновить');
+                button_up.appendChild(spa_up);
+                var button_del = createElement('button',{type:'button',class:'button button-delete'});
+                var spa_del = createElement('span',{},'Удалить');
+                button_del.appendChild(spa_del);
+                td.find('form').append(button_up);
+                td.find('form').append(button_del);
+				td.addClass('selected');
 			}
 		}
 	});
@@ -197,6 +208,28 @@ $( "[name=checkorder],[name=title]" ).autocomplete({
     select: function(event, ui) {
     	$(this).val(ui.item.value);
     	$(this).attr('data-id',ui.item.id);
+        var ul = $('.documents-list');
+        ul.empty();
+    	$.ajax({
+			method:'post',
+			url:wp_ajax.url,
+			data:{
+				action:'get_list',
+				id:ui.item.id
+			},
+			success:function (data) {
+				var doc = [];
+				data = JSON.parse(data);
+
+				for (var i = 0; i < data.length; i++){
+                    var li = document.createElement('li');
+					li.innerText = data[i].title;
+                    doc.push(li);
+				}
+				console.log(doc);
+                ul.append(doc);
+            }
+		});
     }
 }).focus(function () {
     $(this).autocomplete("search",$(this).val());
@@ -276,6 +309,7 @@ $('.reminder-form').on('click','.button-delete',function(){
     var tr = $(this).closest('tr');
     var td = $(this).closest('td');
     var order_id = tr.attr('data-id');
+
     $.ajax({
         method:'post',
         url:wp_ajax.url,
@@ -286,9 +320,71 @@ $('.reminder-form').on('click','.button-delete',function(){
         success:function(data){
             if(data == 1){
                 $('.set-reminder-button,.reminder-form').removeClass('active');
+                td.find('.reminder-field-date').val('');
+                td.find('.reminder-field-hour').val('');
+                td.find('.reminder-field-min').val('');
+                td.find('.button-update').remove();
+                td.find('.button-delete').remove();
+
+                var button = createElement('button',{type:'button',class:'button button-invert'});
+                var span = createElement('span',{},'Установить напоминание');
+                button.appendChild(span);
+                td.find('form').append(button);
                 td.removeClass('selected');
             }
         }
     });
     return false;
 });
+
+
+$('#order-date-end').datepicker({
+    changeYear: false,
+    /*showOtherMonths: true,*/
+    dateFormat: "dd/mm/yy",
+    dayNamesMin: ["Н", "П", "В", "С", "Ч", "П", "С"],
+    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    onSelect: function(dateText, inst) {
+    	$.ajax({
+			method:'post',
+			url:wp_ajax.url,
+			data:{
+				action:'get_dates',
+				date:dateText
+			},
+			success:function (data) {
+                $('.diagram-list').empty();
+				data = JSON.parse(data);
+				if(data.length > 0){
+                    for (var i = 0; i < data.length; i++){
+						var block = createElement('div',{class:'diagram-item'});
+						var span_day = createElement('span',{class:'diagram-day'},data[i].date);
+						var div_val = createElement('div',{class:'diagram-value '+data[i].class,style:'height:'+data[i].height+'px'});
+						var span_cost = createElement('span',{class:'diagram-cost'},data[i].cost+' грн');
+						block.appendChild(span_day);
+						block.appendChild(div_val);
+						block.appendChild(span_cost);
+						$('.diagram-list').append(block);
+					}
+
+				}
+
+            }
+		});
+    }
+});
+$('#order-date-end').on('input',function (){
+    $(this).val('');
+});
+
+function createElement(tag,attr,text){
+	var el = document.createElement(tag);
+	if(typeof attr == 'object'){
+		for(at in attr)
+			el.setAttribute(at,attr[at]);
+	}
+	if(text)
+		el.innerText = text;
+	return el;
+}
+

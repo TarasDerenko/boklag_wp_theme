@@ -1,8 +1,4 @@
 <?php
-add_action('admin_menu', function(){
-    add_menu_page( 'Калькулятор стоимости услуги', 'Сообщения', 'manage_options', 'calculator-message', 'add_calc_message', '
-dashicons-email-alt', 71 );
-} );
 add_action('admin_head','admin_style');
 
 /**************************************************************/

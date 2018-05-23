@@ -1,16 +1,4 @@
 <?php
-add_action('admin_menu', function(){
-    add_menu_page(
-        'Статистика по Регионам',
-        'Статистика',
-        'manage_options',
-        'region-statistics',
-        'add_region_statistics',
-        'dashicons-chart-bar',
-        72 );
-} );
-
-
 /**************************************************************/
 function add_region_statistics(){
     global $wpdb;

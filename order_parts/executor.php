@@ -18,7 +18,7 @@
                                 <div class="filter-column-3">
                                     <div class="filter-row">
                                         <label class="filter-label" for="">Срок выполнения услуги:</label>
-                                        <input class="filter-field" type="date">
+                                        <input class="filter-field" type="text" id="order-date-end" placeholder="дд/мм/гггг">
                                     </div>
                                     <div class="filter-row">
                                         <label class="filter-label" for="">Цена</label>

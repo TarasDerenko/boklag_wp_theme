@@ -1,14 +1,4 @@
 <?php
-add_action('admin_menu', function(){
-    add_menu_page(
-        'Boklag настройки',
-        'Boklag настройки',
-        'manage_options',
-        'boklag-options',
-        'add_boklag_setting',
-        '',
-        73 );
-} );
 
 /**************************************************************/
 function add_boklag_setting(){

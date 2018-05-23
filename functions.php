@@ -29,8 +29,11 @@ function update_boklag_user_data($id,array $args){
 	  	'user_avatar' => '',
 	);
 	$data = array_intersect_key(array_merge($def,$args),$def);
-	foreach ($data as $key => $value)
-		update_user_meta($id,$key,$value);
+	foreach ($data as $key => $value){
+	    if($key == 'user_avatar' && empty($value))
+	        continue;
+        update_user_meta($id,$key,$value);
+    }
 	return true;
 }
 
@@ -115,10 +118,10 @@ function get_reminder_bell(){
                     </div>
                 </div>
                 <?php if($selected): ?>
-                    <button type="submit" class="button button-update"><span>Обновить</span></button>
+                    <button type="button" class="button button-update"><span>Обновить</span></button>
                     <button class="button button-delete"><span>Удалить</span></button>
                 <?php else: ?>
-                    <button type="submit" class="button button-invert"><span>Установить напоминание</span></button>
+                    <button type="button" class="button button-invert"><span>Установить напоминание</span></button>
                 <?php endif; ?>
             </form>
         </div>

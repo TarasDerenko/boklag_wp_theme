@@ -57,7 +57,7 @@ global $order;
         <div class="order-detailed-map">
             <div id="map-<?= $order->id ?>" data-lat="<?= $order->lat ?>" data-lng="<?= $order->lng ?>" data-rang="<?= $order->rang ?>" class="location-map"></div>
         </div>
-        <button class="executer-answers-show">Ответов (2)<span class="arrow"></span></button>
+        <button class="executer-answers-show" type="button">Ответов (2)<span class="arrow"></span></button>
     </div>
     <div class="order-detailed-answer">
         <div class="order-answer-table">
@@ -72,7 +72,7 @@ global $order;
                     <td>12345</td>
                     <td>2500</td>
                     <td>В крайтчайшие сроки при условии хорошей погоды , сделаем за 5 дней</td>
-                    <td><button class="button button-invert"><span>Выбрать</span></button></td>
+                    <td><button class="button button-invert" type="button"><span>Выбрать</span></button></td>
                 </tr>
                 <tr class="order-executer-extend">
                     <td colspan="4">
@@ -84,7 +84,7 @@ global $order;
                                 <form>
                                     <div class="order-executer-form">
                                         <input type="text" placeholder="Написать сообщение">
-                                        <button type="submit" class="button button-invert"><span>Отправить</span></button>
+                                        <button type="button" class="button button-invert"><span>Отправить</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -153,7 +153,7 @@ global $order;
                     <td>12345</td>
                     <td>2500</td>
                     <td>В крайтчайшие сроки при условии хорошей погоды , сделаем за 5 дней</td>
-                    <td><button class="button button-invert"><span>Выбрать</span></button></td>
+                    <td><button class="button button-invert" type="button"><span>Выбрать</span></button></td>
                 </tr>
                 <tr class="order-executer-extend">
                     <td colspan="4">
@@ -165,7 +165,7 @@ global $order;
                                 <form>
                                     <div class="order-executer-form">
                                         <input type="text" placeholder="Написать сообщение">
-                                        <button type="submit" class="button button-invert"><span>Отправить</span></button>
+                                        <button type="button" class="button button-invert"><span>Отправить</span></button>
                                     </div>
                                 </form>
                             </div>
@@ -233,6 +233,6 @@ global $order;
             </table>
         </div>
     </div>
-    <button class="order-detailed-close"></button>
+    <button class="order-detailed-close" type="button"></button>
 </div>
 </td>

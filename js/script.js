@@ -1,3 +1,6 @@
+$(document).ready(function () {
+    getLocation();
+});
 $('.personal-content-photo .button-delete').click(function(){
 	$('.personal-photo img').attr('src','');
 	$('[name=delete-avatar]').val($(this).attr('data-avatar'));
@@ -9,6 +12,7 @@ function readURL(input) {
 
     reader.onload = function(e) {
       $('.personal-photo img').attr('src', e.target.result);
+      $(input).closest('.personal-photo-buttons').addClass('save');
     }
 
     reader.readAsDataURL(input.files[0]);
@@ -19,7 +23,7 @@ $(".button-reload").change(function() {
   readURL(this);
 });
 
-$()
+
 function checkPasswordStrength(pass,input) {
 	$(input).parent().removeClass('bad good strong normal');
     var strength = valid_pass(pass);
@@ -323,7 +327,7 @@ function initMap(id) {
 var userTel = $('[name=user_tel]');
 
 if(!!userTel.mask){
-    userTel.mask('00 (000) 000-00-00');
+    userTel.mask('+38 (000) 000-00-00');
 }else{
     userTel.on('input',function () {
         var val = $(this).val();
@@ -352,7 +356,7 @@ $('[name=user_email]').on('input',function () {
 
 userTel.on('input',function () {
     var comp = $(this).siblings('.personal-complete');
-    if($(this).val().length > 17){
+    if($(this).val().length > 18){
         if(!comp.hasClass('active'))
             comp.addClass('active');
     }else{
@@ -364,17 +368,29 @@ $('.change-password-button').click(function () {
     $('.change-password-block').toggleClass('active');
 });
 
-// $('.order-info td:last-child').click(function (event) {
-//    event.stopPropagation();
-// });
-
-$('#order-date-end').datepicker({
-    changeYear: false,
-    /*showOtherMonths: true,*/
-    dateFormat: "dd/mm/yy",
-    dayNamesMin: ["Н", "П", "В", "С", "Ч", "П", "С"],
-    monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+$('.order-info td:last-child').click(function (event) {
+   event.stopPropagation();
 });
-$('#order-date-end').on('input',function (){
-    $(this).val('');
+$('.order-detailed-answer button').click(function (e) {
+    e.preventDefault();
+});
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+   alert("Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude);
+}
+
+$('.location-another-select [name=my-city]').on('focus',function(){
+    var data = {
+        types:['(regions)']
+    };
+    autocomplete = new google.maps.places.Autocomplete(this,data);
 });

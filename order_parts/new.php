@@ -1,4 +1,4 @@
-<?php get_header('profile')?>
+<?php get_header('profile'); ?>
 <main class="main">
     <section class="page-title-section">
         <div class="container">
@@ -61,63 +61,7 @@
                                 </div>
                             </div>
                             <div class="new-order-diagram">
-                                <div class="diagram-list">
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">8 ноября</span>
-                                        <div class="diagram-value" style="height: 61px;"></div>
-                                        <span class="diagram-cost">1200 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">9 ноября</span>
-                                        <div class="diagram-value" style="height: 70px;"></div>
-                                        <span class="diagram-cost">1400 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">10 ноября</span>
-                                        <div class="diagram-value blue" style="height: 175px;"></div>
-                                        <span class="diagram-cost">3400 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">11 ноября</span>
-                                        <div class="diagram-value" style="height: 50px;"></div>
-                                        <span class="diagram-cost">1100 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">12 ноября</span>
-                                        <div class="diagram-value red" style="height: 35px;"></div>
-                                        <span class="diagram-cost">1010 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">13 ноября</span>
-                                        <div class="diagram-value" style="height: 151px;"></div>
-                                        <span class="diagram-cost">3000 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">14 ноября</span>
-                                        <div class="diagram-value" style="height: 61px;"></div>
-                                        <span class="diagram-cost">1300 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">15 ноября</span>
-                                        <div class="diagram-value" style="height: 70px;"></div>
-                                        <span class="diagram-cost">1500 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">16 ноября</span>
-                                        <div class="diagram-value" style="height: 125px;"></div>
-                                        <span class="diagram-cost">2300 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">17 ноября</span>
-                                        <div class="diagram-value" style="height: 50px;"></div>
-                                        <span class="diagram-cost">11100 грн</span>
-                                    </div>
-                                    <div class="diagram-item">
-                                        <span class="diagram-day">18 ноября</span>
-                                        <div class="diagram-value" style="height: 104px;"></div>
-                                        <span class="diagram-cost">2000 грн</span>
-                                    </div>
-                                </div>
+                                <?php get_template_part('template_parts/avail')?>
                             </div>
                             <div class="new-order-location">
                                 <div class="order-location-form">
@@ -168,13 +112,7 @@
                             </div>
                             <div class="new-order-documents">
                                 <h3 class="documents-title">Список документов:</h3>
-                                <ul class="documents-list">
-                                    <li>Копия паспорта</li>
-                                    <li>Копия идентификационного номера</li>
-                                    <li>Акт согласования границ (бланк акта)</li>
-                                    <li>Копия документов прав собственности на объекты недвижимости</li>
-                                    <li>Копия документов БТИ</li>
-                                </ul>
+                                <ul class="documents-list"></ul>
                                 <div class="documents-attach">
                                     <label class="button button-invert documents-attach-button">
                                         <span>Прикрепить документ</span>

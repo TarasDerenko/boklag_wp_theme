@@ -11,6 +11,12 @@
                     Изменения прошли успешно!
                 </p>
             </div>
+        <?php elseif(isset($error_message['pass'])): ?>
+            <div class="edit-blok-info bg-danger">
+                <p>
+                    <?= $error_message['pass'] ?>
+                </p>
+            </div>
         <?php endif;?>
         <div class="personal-content-wrapper">
             <form method="post" enctype="multipart/form-data">
@@ -25,6 +31,7 @@
                             </label>
                             <input type="hidden" name="delete-avatar">
                             <button class="button-delete" type="button" data-avatar="<?php echo get_bl_user_data($boklag_user_meta,'user_avatar')?>"></button>
+                            <button type="submit" id="save-avatar" name="save-avatar" value="save"></button>
                         </div>
                     </div>
                     <div class="personal-content-info">
@@ -72,6 +79,9 @@
                                     <div class="personal-complete"></div>
                                 </div>
                             </div>
+                            <button class="change-password-button button" name="change-pass" value="change">
+                                <span>Сменить</span>
+                            </button>
                         </div>
                         <div class="personal-text">
                             Информация, которую будут видеть другие пользователи просматривая ваш профиль

@@ -192,9 +192,9 @@ class BLOrder
         global $wpdb;
         $search = '';
 
-        if(isset($_GET['sp']) && strpos($_SERVER['REQUEST_URI'],'search') !== false){
+        if(isset($_GET['sp']) && !empty(trim($_GET['sp'])) && strpos($_SERVER['REQUEST_URI'],'search') !== false){
             $like = '%'.$_GET['sp'].'%';
-            $search = $wpdb->prepare( "AND id LIKE %s OR title LIKE %s OR description LIKE %s OR street LIKE %s", array_fill(0,4,$like));
+            $search = $wpdb->prepare( "AND (id LIKE %s OR title LIKE %s OR description LIKE %s OR street LIKE %s)", array_fill(0,4,$like));
         }
 
         $str = '';
@@ -227,6 +227,7 @@ class BLOrder
             $str .= $wpdb->prepare("AND `mark` = %d ",$mark);
 
         $q = "SELECT * FROM ".self::TABLE_NAME." ".$str.$search;
+
         wp_cache_set('order_query',$q);
         wp_cache_set('order_limit',$limit);
         wp_cache_set('order_paged',$paged);

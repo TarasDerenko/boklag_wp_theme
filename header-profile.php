@@ -39,7 +39,7 @@
                 <div class="avatar-dropdown-content">
                     <div class="avatar-dropdown-image">
                         <img src="<?php echo $boklag_user_avatar ?>" alt="">
-                        <a href="#" class="avatar-dropdown-edit"></a>
+                        <a href="/kabinet/" class="avatar-dropdown-edit"></a>
                     </div>
                     <div class="avatar-dropdown-info">
                         <h3 class="avatar-dropdown-title"><?php echo $boklag_user->display_name; ?></h3>
@@ -48,7 +48,7 @@
                         <span class="avatar-dropdown-status"><a href="/?logout">Выйти</a></span>
 
                     </div>
-                    <a href="/kabinet" class="avatar-dropdown-settings"></a>
+                    <a href="/kabinet/" class="avatar-dropdown-settings"></a>
                 </div>
             </div>
         </nav>

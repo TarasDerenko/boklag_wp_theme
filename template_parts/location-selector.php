@@ -18,11 +18,12 @@
             <div class="location-another">
                 <label for="">Выбрать другой город:</label>
                 <div class="location-another-select">
-                    <select name="my-city">
+                   <!-- <select name="my-city">
                         <option value="kyiv">г. Киев</option>
                         <option value="lviv">г. Львов</option>
                         <option value="dnepr">г. Днепр</option>
-                    </select>
+                    </select>-->
+                    <input type="text" name="my-city" placeholder="г. Киев">
                 </div>
             </div>
             <button type="button" class="location-close">&times;</button>
