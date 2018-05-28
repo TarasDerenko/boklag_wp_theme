@@ -377,6 +377,26 @@ $('#order-date-end').on('input',function (){
     $(this).val('');
 });
 
+$('#search-service').on('input',function () {
+	var val = $(this).val();
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'search_service',
+			val:val
+		},
+		success:function(data){
+			data = JSON.parse(data);
+			$('.service-list').empty();
+			if(data.length > 0){
+				for (var i = 0; i < data.length; i++)
+                    $('.service-list').append(createElement('li',{},data[i].title));
+			}
+		}
+	});
+});
+
 function createElement(tag,attr,text){
 	var el = document.createElement(tag);
 	if(typeof attr == 'object'){

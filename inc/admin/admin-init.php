@@ -8,15 +8,24 @@ require_once __DIR__.'/statistic-region.php';
 require_once __DIR__.'/services-document.php';
 require_once __DIR__.'/documents.php';
 require_once __DIR__.'/employ.php';
+require_once __DIR__.'/boklag-orders.php';
+require_once __DIR__.'/action.php';
 add_action('admin_menu', function(){
     add_menu_page(
-        'Boklag настройки',
-        'Boklag настройки',
+        'Boklag',
+        'Boklag',
         'manage_options',
         'boklag-options',
         'add_boklag_setting',
         '',
         73 );
+    add_submenu_page(
+        'boklag-options',
+        'Заказы',
+        'Заказы',
+        'manage_options',
+        'boklag-orders',
+        'add_bl_orders');
     add_submenu_page(
         'boklag-options',
         'Статистика по Регионам',

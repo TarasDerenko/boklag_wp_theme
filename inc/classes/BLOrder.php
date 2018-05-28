@@ -64,6 +64,7 @@ class BLOrder
     public $document;
     public $mark;
     public $type;
+    public $comments;
     public $date_end;
     public $date_change;
     public $date_create;
@@ -105,6 +106,18 @@ class BLOrder
             '1' => 'ожидает выполнения',
             '2' => 'в работе',
             '3' => 'выполнено'
+        );
+        if(key_exists($key,$status))
+            return $status[$key];
+        return 'не определен';
+    }
+
+    public static function get_type($key){
+        $status = array(
+            '1' => 'Открыт',
+            '2' => 'В Черновике',
+            '3' => 'В Архиве',
+            '4' => 'В Удаленных',
         );
         if(key_exists($key,$status))
             return $status[$key];
@@ -163,7 +176,7 @@ class BLOrder
         $fields = array();
         $this->date_change = date('Y-m-d H:i:s');
         foreach ($this as $key => $value){
-            if($key == 'id' || $key == 'date_create' || empty($value))
+            if($key == 'id' || $key == 'date_create' || empty($value) || $key == 'comments')
                 continue;
             $fields[$key] = trim($value);
         }
@@ -174,6 +187,9 @@ class BLOrder
         global $wpdb;
         $query = $wpdb->prepare('SELECT * FROM '.self::TABLE_NAME.' WHERE id = %d LIMIT 1',array($id));
         $result = $wpdb->get_results($query);
+        if(!$result){
+            return false;
+        }
         $obj = new self();
         self::parse_result($obj,$result);
         return $obj;
@@ -232,7 +248,7 @@ class BLOrder
         wp_cache_set('order_limit',$limit);
         wp_cache_set('order_paged',$paged);
         $query = $wpdb->prepare($q." ORDER BY id DESC LIMIT %d OFFSET %d",array($limit,$offset));
-        $results = $wpdb->get_results($query);
+        $results = self::withComments($wpdb->get_results($query));
 
         return self::parse_all_results($results);
     }
@@ -369,4 +385,20 @@ class BLOrder
         return $wpdb->update(self::TABLE_NAME,array('mark' => $mark),array('id' => $ids));
     }
 
+    private static function withComments($arr){
+        $comments = BLComments::findByOrderId(array_map(function($it){
+            return $it->id;
+        },$arr));
+        $coms = array();
+        foreach ($comments as $comment){
+            $coms[$comment->order_id][] = $comment;
+        }
+        $res = array();
+        foreach ($arr as $order){
+            if(array_key_exists($order->id,$coms))
+                $order->comments = $coms[$order->id];
+            $res[] = $order;
+        }
+        return $res;
+    }
 }

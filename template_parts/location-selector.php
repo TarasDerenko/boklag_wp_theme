@@ -1,9 +1,8 @@
-<?php if(!isset($_COOKIE['current-place'])): ?>
 <div class="location active">
     <form method="post" class="select-city">
         <div class="location-wrapper">
             <div class="location-current">
-                <div class="location-current-text">Вы из г. Винница?</div>
+                <div class="location-current-text">Вы из г. <span> ... </span>?</div>
                 <input type="hidden" name="current-place" value="1">
                 <input type="hidden" name="city-current" value="vinytsa">
                 <label class="location-current-option">
@@ -18,11 +17,6 @@
             <div class="location-another">
                 <label for="">Выбрать другой город:</label>
                 <div class="location-another-select">
-                   <!-- <select name="my-city">
-                        <option value="kyiv">г. Киев</option>
-                        <option value="lviv">г. Львов</option>
-                        <option value="dnepr">г. Днепр</option>
-                    </select>-->
                     <input type="text" name="my-city" placeholder="г. Киев">
                 </div>
             </div>
@@ -30,4 +24,3 @@
         </div>
     </form>
 </div>
-<?php endif; ?>

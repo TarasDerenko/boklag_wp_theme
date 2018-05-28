@@ -384,8 +384,18 @@ function getLocation() {
 }
 
 function showPosition(position) {
-   alert("Latitude: " + position.coords.latitude +
-        "<br>Longitude: " + position.coords.longitude);
+    var content = file_get_contents( "https://maps.googleapis.com/maps/api/geocode/json?latlng="+position.coords.latitude+","+position.coords.longitude+"&components=locality&language=ru&key=AIzaSyCMz6ybbsM30th_jIWkEQMXNYMDCtU_j-k" );
+    var content = JSON.parse(content);
+
+    if(content.results){
+        var res = geoResult(content.results[0]);
+        if(res && res.locality){
+            $('[name="city-current"]').val(res.locality);
+            $('.location-current-text span').text(res.locality);
+        }
+    }
+
+
 }
 
 $('.location-another-select [name=my-city]').on('focus',function(){
@@ -394,3 +404,37 @@ $('.location-another-select [name=my-city]').on('focus',function(){
     };
     autocomplete = new google.maps.places.Autocomplete(this,data);
 });
+
+function file_get_contents( url ) {
+    var req = null;
+    try { req = new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {
+        try { req = new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {
+            try { req = new XMLHttpRequest(); } catch(e) {}
+        }
+    }
+    if (req == null) throw new Error('XMLHttpRequest not supported');
+
+    req.open("GET", url, false);
+    req.send(null);
+
+    return req.responseText;
+}
+
+function geoResult(place) {
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    for (var i = 0; i < place.address_components.length; i++) {
+        var addressType = place.address_components[i].types[0];
+        if (componentForm[addressType]) {
+            componentForm[addressType] = place.address_components[i][componentForm[addressType]];
+        }
+    }
+    return componentForm;
+}

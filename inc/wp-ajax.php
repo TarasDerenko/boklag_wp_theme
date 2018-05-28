@@ -32,6 +32,9 @@ add_action('wp_ajax_nopriv_get_list', 'bl_get_list');
 add_action('wp_ajax_get_dates', 'bl_get_dates');
 add_action('wp_ajax_nopriv_get_dates', 'bl_get_dates');
 
+add_action('wp_ajax_search_service', 'bl_search_service');
+add_action('wp_ajax_nopriv_search_service', 'bl_search_service');
+
 function show_news_more(){
   $result = array();
   $news = get_posts(array(
@@ -214,6 +217,14 @@ function bl_get_list(){
     if(isset($_POST['id'])){
         $list = BLService::getDocumentsById($_POST['id']);
         echo wp_json_encode($list);
+    }
+    die;
+}
+
+function bl_search_service(){
+    if(isset($_POST['val'])){
+        $res = BLService::searchServices($_POST['val']);
+        echo wp_json_encode($res);
     }
     die;
 }

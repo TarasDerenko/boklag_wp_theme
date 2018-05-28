@@ -1,5 +1,5 @@
 <?php
-add_action('admin_head','admin_style');
+add_action('admin_head','bl_admin_style');
 
 /**************************************************************/
 function add_calc_message(){
@@ -53,7 +53,7 @@ function add_calc_message(){
 }
 /**************************************************************/
 
-function admin_style(){ ?>
+function bl_admin_style(){ ?>
     <style>
         .calc-table{
             width:100%;

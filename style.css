@@ -1,3 +1,10 @@
+/**
+
+Theme Name: Boklag
+
+Theme Description: Boklag Theme
+
+*/
 .bg-danger{
 	background-color: rgba(255,0,0,0.8) !important;
 }
@@ -241,7 +248,7 @@
 .save [name="save-avatar"]{
 	display: block;
 }
-.location-another-select [name=my-city] { width: 315px; height: 39px; padding-left: 20px; padding-right: 20px; background: transparent url("../img/arrow-location.svg") no-repeat right center; border: none; -webkit-transform: skewX(-30deg); transform: skewX(-30deg); font-family: "Myriad Pro"; font-weight: 400; font-size: 14px; color: #ffffff; outline: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.location-another-select [name=my-city] { width: 315px; height: 39px; padding-left: 20px; padding-right: 20px; background: transparent url("img/arrow-location.svg") no-repeat right center; border: none; -webkit-transform: skewX(-30deg); transform: skewX(-30deg); font-family: "Myriad Pro"; font-weight: 400; font-size: 14px; color: #ffffff; outline: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 @media (max-width: 991px){
 	.help-container p, .help-container ul, .help-container ol{
 		padding-left: 30px;

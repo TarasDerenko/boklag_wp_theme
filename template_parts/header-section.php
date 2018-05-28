@@ -1,5 +1,5 @@
 <?php
-get_template_part('template_parts/location','selector');
+ do_action('location_selector');
 ?>
     <header class="header">
         <a href="/" class="header-logo"><img src="<?php bloginfo('template_url')?>/img/logo.png" alt="ФЛП Боклаг" width="263" height="79"></a>

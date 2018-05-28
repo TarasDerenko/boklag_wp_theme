@@ -194,7 +194,7 @@ function boklag_login(){
         ));
 
         if( !is_wp_error($user_login) ){
-            wp_redirect(home_url('/kabinet'));
+            wp_redirect(home_url('/orders'));
             die;
         }else{
             $error_login['login'] = 'Неправельный логин или пароль!';
@@ -426,8 +426,8 @@ add_action('is_boklag_user_login','add_cart_to_user');
  *
  * */
 function boklag_set_cookie(){
+    global $wpdb;
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['current-place'])){
-        global $wpdb;
         $place = '';
         if(isset($_POST['city-current'],$_POST['location-current']) && $_POST['location-current'] == 1)
             $place = $_POST['city-current'];
@@ -436,16 +436,18 @@ function boklag_set_cookie(){
         if(!empty($place)){
             setcookie('current-place',$place,(time()+3600*24*30));
             $wpdb->insert(
-                    'wp_region_statistics',
+                    $wpdb->prefix.'bl_region_statistics',
                     array(
                          'region' => $place,
                          'ip_user' => $_SERVER['REMOTE_ADDR'],
                          'http_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                         'user_id' => is_user_logged_in() ? get_current_user_id() : 0,
                     ),
                     array(
                          '%s',
                          '%s',
-                         '%s'
+                         '%s',
+                         '%d'
                     )
             );
         }
@@ -453,8 +455,34 @@ function boklag_set_cookie(){
         wp_redirect($_SERVER['REQUEST_URI']);
         die;
     }
+
+    if(is_user_logged_in()){
+        $res = $wpdb->get_results("
+        SELECT *
+        FROM {$wpdb->prefix}bl_region_statistics
+        WHERE user_id = ".get_current_user_id()."
+        LIMIT 1
+        ");
+        wp_cache_set('place',false);
+        if(!$res && $wpdb->update($wpdb->prefix."bl_region_statistics",array('user_id' => get_current_user_id()),array('ip_user' => $_SERVER['REMOTE_ADDR']))){
+           wp_cache_set('place',true);
+        }
+    }else{
+        wp_cache_set('place',false);
+    }
 }
 add_action('init','boklag_set_cookie');
+
+
+
+function bl_location_selector(){
+    $place = wp_cache_get('place');
+    if(!$place && !isset($_COOKIE['current-place'])){
+        get_template_part('template_parts/location','selector');
+    }
+
+}
+add_action('location_selector','bl_location_selector');
 
 /*
  *
@@ -551,11 +579,11 @@ function create_new_bl_orders(){
 
 add_action('init','create_new_bl_orders');
 
-function init_bl_orders($type = null,$mark = null){
+function init_bl_orders($type = null,$mark = null,$paged = 1, $limit = null){
     global $bl_orders;
-    $bl_orders = BLOrder::find(1,null,$type,$mark);
+    $bl_orders = BLOrder::find($paged,$limit,$type,$mark);
 }
-add_action('start_orders','init_bl_orders',10,2);
+add_action('start_orders','init_bl_orders',10,4);
 
 function init_bl_orders_filter($type = null,$mark = null){
     global $bl_orders;
@@ -612,7 +640,7 @@ function bl_delete_orders(){
                 foreach ($_POST['del'] as $order_id){
                     $notification = new BLNotification;
                     $notification->order_id = $order_id;
-                    $notification->description = "Перемищение в удаленные заказа №".$order_id."  прошло успешно!";
+                    $notification->description = "Заказ №".$order_id." успешно перемищено в удаленные!";
                     $notification->insert();
                     unset($notification);
                 }
@@ -748,3 +776,31 @@ function checked_user_front_login(){
     }
 }
 add_action('wp','checked_user_front_login');
+
+/*
+ *
+ *
+ * @uslugi page
+ *
+ *
+ * */
+function bl_start_service(){
+    global $services;
+    $services = BLService::getServices();
+}
+function bl_end_service(){
+    global $services;
+    unset($services);
+}
+add_action('start_service','bl_start_service');
+add_action('end_service','bl_end_service');
+
+function bl_add_comment_user(){
+    if($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_POST['answer-text'])){
+        $comment = new BLComments();
+        $comment->comments = $_POST['answer-text'];
+        $comment->parent_id = $_POST['parent-id'];
+        $comment->save();
+    }
+}
+add_action('init','bl_add_comment_user');
