@@ -316,6 +316,8 @@ function renderSingleService(data){
 }
 
 
+
+
 function createElement(tag,attr,text) {
     var el = document.createElement(tag);
     if(attr){
@@ -329,3 +331,57 @@ function createElement(tag,attr,text) {
     return el;
 }
 
+jQuery('.edit-comment').click(function () {
+    var parent = jQuery(this).closest('tr');
+    var comment = parent.find('.comment-text');
+    var textarea = '';
+    var name = 'Редактировать';
+    if(comment.find('textarea').length > 0){
+        textarea = comment.find('textarea').val();
+        jQuery.ajax({
+            method:'post',
+            url:wp_adm.url,
+            data:{
+                action:'bl_update_comment',
+                id:parent.attr('comment-id'),
+                text:textarea
+            },
+            success:function(data){
+                data = JSON.parse(data);
+                alert(data.message);
+            }
+        });
+    }else{
+        name = 'Сохранить';
+        textarea = createElement('textarea');
+        textarea.innerText = comment.text();
+    }
+    jQuery(this).text(name);
+    comment.html(textarea);
+});
+
+jQuery('.delete-comment').click(function () {
+    var parent = jQuery(this).closest('tr');
+    var comment = parent.find('.comment-text');
+   var _true = confirm('Вы уверены?');
+    if(_true){
+        jQuery.ajax({
+            method:'post',
+            url:wp_adm.url,
+            data:{
+                action:'bl_delete_comment',
+                id:parent.attr('comment-id'),
+            },
+            success:function(data){
+                data = JSON.parse(data);
+                if(data.success == true){
+                    parent.remove();
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+
+});

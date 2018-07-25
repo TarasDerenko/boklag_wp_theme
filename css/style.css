@@ -1460,10 +1460,10 @@ img { max-width: 100%; height: auto; }
 .order-answer-table tr:nth-child(even) { background-color: #ffffff; }
 .order-answer-table th, .order-answer-table td { border: 1px solid #ebebeb; font-family: "HelveticaNeueCyr"; font-weight: 300; font-size: 14px; color: rgba(35, 33, 30, 0.8); }
 .order-answer-table th { padding: 6px 23px; text-align: center; vertical-align: middle; }
-.order-answer-table th:nth-child(1) { width: 10%; padding: 6px; }
-.order-answer-table th:nth-child(2) { width: 9%; text-align: center; }
-.order-answer-table th:nth-child(3) { width: 43%; text-align: left; }
-.order-answer-table th:nth-child(4) { width: 15%; }
+.order-answer-table th:nth-child(1) { width: 15%; padding: 6px; }
+/*.order-answer-table th:nth-child(2) { width: 9%; text-align: center; }*/
+.order-answer-table th:nth-child(2) { width: 43%; text-align: left; }
+.order-answer-table th:nth-child(3) { width: 15%; }
 .order-answer-table td { padding: 8px; vertical-align: middle; text-align: center; }
 .order-answer-table td:nth-child(2) { text-align: center; }
 .order-answer-table .button { max-width: 122px; padding: 12px 11px 11px; font-weight: 300; font-size: 14px; }

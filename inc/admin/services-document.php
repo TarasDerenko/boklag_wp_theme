@@ -36,9 +36,9 @@ function services_document(){
                     <li class="doc-info" id="info-<?=$k?>">
                         <table>
                         </table>
-                        <button class="add-doc btn" data-id="<?=$k?>">Добавить Документ</button>
-                        <button class="edit-service btn" data-id="<?=$k?>">Редактировать Услугу</button>
-                        <button class="delete-service btn" data-id="<?=$k?>">Удалить Услугу</button>
+                        <button class="add-doc button" data-id="<?=$k?>">Добавить Документ</button>
+                        <button class="edit-service button" data-id="<?=$k?>">Редактировать Услугу</button>
+                        <button class="delete-service button" data-id="<?=$k?>">Удалить Услугу</button>
                     </li>
                 </ul>
             </li>
@@ -142,16 +142,16 @@ function services_style(){ ?>
             cursor: pointer;
         }
         .delete-service{
-            color: #fff;
-            background: firebrick;
+            color: #fff !important;
+            background: firebrick !important;
         }
         .edit-service{
-            color: #fff;
-            background: #3aad60;
+            color: #fff !important;
+            background: #3aad60 !important;
         }
         .add-doc{
-            background: #00a0d2;
-            color: #fff;
+            background: #00a0d2 !important;
+            color: #fff !important;
         }
         .delete-documents{
             color: firebrick;

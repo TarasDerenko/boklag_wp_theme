@@ -1,8 +1,7 @@
 <?php
 $order = BLOrder::findOne($_GET['id']);
 if($order instanceof BLOrder):
-$comments = BLComments::findByOrderId($_GET['id']);
-$perfomers = BLPerfomers::find();
+$comments = BLComments::findByOrderId($order->id,true);
 ?>
 <h3>Заказ #<?=$order->id?></h3>
 <table>
@@ -61,24 +60,45 @@ $perfomers = BLPerfomers::find();
         <td><?= date_i18n('d.m.Y H:i',strtotime($order->date_create)) ?></td>
     </tr>
     </tbody>
-</table>
+</table><br>
     <form method="post">
-        <select name="code" id="" placeholder="Исполнитель">
-            <option value="0">---</option>
-            <?php foreach ($perfomers as $perfomer):?>
-                <option value="<?=$perfomer->id?>"><?=$perfomer->name?></option>
-            <?php endforeach; ?>
-        </select>
-        <br>
-        <input type="text" placeholder="Цена" name="price"><br>
         <textarea name="comment" cols="40" rows="5" placeholder="Условия исполнения"></textarea><br>
-        <button>Добавить</button>
+        <button class="button">Добавить</button>
     </form>
-<div class="comments">
-    <ul>
-
-    </ul>
-</div>
+    <h3>Коментарии</h3>
+    <div class="main-content">
+        <div class="archive-content">
+            <div class="content-table" data-type="<?php echo BLOrder::TYPE_OPEN?>">
+                <table class="wp-list-table widefat fixed striped posts">
+                    <thead>
+                    <tr>
+                        <th>N</th>
+                        <th>Имя</th>
+                        <th>Коментар</th>
+                        <th>Дата создание</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php if(is_array($comments) && sizeof($comments) > 0):?>
+                        <?php foreach ($comments as $i => $comment): ?>
+                        <tr class="order-info" data-id="<?php echo $order->id; ?>"  comment-id="<?=$comment->id?>">
+                            <td><?php echo $i;?></td>
+                            <td><?php echo $comment->display_name;?></td>
+                            <td class="comment-text"><?php echo $comment->comment;?></td>
+                            <td><?php echo date_i18n('d/m/Y H:i',strtotime($comment->create_date))?></td>
+                            <td>
+                                <button class="button button-primary edit-comment">Редактировать</button>
+                                <button class="button button-danger delete-comment">Удалить</button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 <?php else: ?>
     <h4> Заказа с таким id не существует! </h4>
 <?php endif; ?>

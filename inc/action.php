@@ -579,11 +579,11 @@ function create_new_bl_orders(){
 
 add_action('init','create_new_bl_orders');
 
-function init_bl_orders($type = null,$mark = null,$paged = 1, $limit = null){
+function init_bl_orders($type = null,$mark = null,$paged = 1, $limit = null,$user = true){
     global $bl_orders;
-    $bl_orders = BLOrder::find($paged,$limit,$type,$mark);
+    $bl_orders = BLOrder::find($paged,$limit,$type,$mark,$user);
 }
-add_action('start_orders','init_bl_orders',10,4);
+add_action('start_orders','init_bl_orders',10,5);
 
 function init_bl_orders_filter($type = null,$mark = null){
     global $bl_orders;
@@ -718,8 +718,6 @@ function bl_user_notification($user_id = false){
     $order_notification = BLNotification::getNewNotificationsByUser($user_id);
     $notification_count += BLNotification::getNewNotificationsCountByUser($user_id);
 
-
-
     foreach ($reminders_notification as $not){
         $el['type'] = 'reminder';
         $el['id'] = $not->id;
@@ -795,12 +793,16 @@ function bl_end_service(){
 add_action('start_service','bl_start_service');
 add_action('end_service','bl_end_service');
 
-function bl_add_comment_user(){
-    if($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_POST['answer-text'])){
-        $comment = new BLComments();
-        $comment->comments = $_POST['answer-text'];
-        $comment->parent_id = $_POST['parent-id'];
-        $comment->save();
-    }
+
+
+function bl_start_notification(){
+    global $bl_notifications, $boklag_user;
+    $bl_notifications = BLNotification::getNotificationsByUser($boklag_user->id);
 }
-add_action('init','bl_add_comment_user');
+
+function bl_end_notification(){
+    global $bl_notifications;
+    unset($bl_notifications);
+}
+add_action('bl_start_notification','bl_start_notification');
+add_action('bl_end_notification','bl_end_notification');

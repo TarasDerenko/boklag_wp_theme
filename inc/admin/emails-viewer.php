@@ -16,7 +16,7 @@ function add_calc_message(){
     ?>
     <div class="wrap">
         <h2><?php echo get_admin_page_title() ?></h2>
-    <table class="table calc-table">
+    <table class="wp-list-table widefat fixed striped posts">
     <thead>
     <tr>
         <th>#</th>

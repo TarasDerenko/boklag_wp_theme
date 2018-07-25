@@ -7,5 +7,9 @@ function boklags_employ(){
     ");
     ?>
 
+    <h2>Занятость</h2>
+
+
     <?php
 }
+

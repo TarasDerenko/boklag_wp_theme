@@ -45,15 +45,17 @@ class BLNotification
 
     }
 
-    public static function getNotificationsByUser($userId){
+    public static function getNotificationsByUser($userId,$pag = false){
         global $wpdb;
-        return $wpdb->get_results("
-            SELECT n.*,o.title,o.status,o.date_end
-            FROM ".self::TABLE_NAME." AS n
-            LEFT JOIN ".BLOrder::TABLE_NAME." AS o
-            ON (`n`.`order_id` = `o`.`id`)
-            WHERE `n`.`user_id` = ".$userId." 
-        ");
+        if(!$pag){
+            return $wpdb->get_results("
+                SELECT n.*,o.title,o.status,o.date_end
+                FROM ".self::TABLE_NAME." AS n
+                LEFT JOIN ".BLOrder::TABLE_NAME." AS o
+                ON (`n`.`order_id` = `o`.`id`)
+                WHERE `n`.`user_id` = ".$userId." 
+            ");
+        }
     }
 
     public static function getNewNotificationsByUser($userId){
@@ -88,5 +90,6 @@ class BLNotification
         global $wpdb;
         return $wpdb->update(self::TABLE_NAME,array('is_view' => 1),array('id' => $id));
     }
+
 
 }

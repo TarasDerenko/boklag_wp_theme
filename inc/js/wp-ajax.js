@@ -11,7 +11,6 @@ $('.about-news-add a').click(function(){
 		success:function(data){
 			if(!data)
 				return;
-			data = JSON.parse(data);
 			var item;
 
 			for (var i = 0; i < data.length; i++) {
@@ -149,7 +148,6 @@ $('.notification-dropdown').on('click','.notification-dropdown-close',function (
 	var type = $(this).attr('data-type');
 	var id = $(this).attr('data-notification');
 	var count = $('.notification-count');
-
 	$.ajax({
 		method:'post',
 		url:wp_ajax.url,
@@ -160,20 +158,14 @@ $('.notification-dropdown').on('click','.notification-dropdown-close',function (
 			user_id:wp_ajax.user_id
 		},
 		success:function (data) {
-
-			data = JSON.parse(data);
 			$(_this).closest('.notification-dropdown').html(data.nots);
-
-
 			if(data.count > 0){
                 count.text(data.count);
 			}else{
                 count.remove();
                 $('.notification-dropdown').removeClass('active');
 			}
-
-
-        }
+		}
 	});
 });
 
@@ -188,7 +180,6 @@ $( "[name=checkorder],[name=title]" ).autocomplete({
                 s: request.term
             },
             success: function(data) {
-                data = JSON.parse(data);
                 if (data.length === 0) {
                     response({
                         label: "Нету такой услуги!"
@@ -219,7 +210,6 @@ $( "[name=checkorder],[name=title]" ).autocomplete({
 			},
 			success:function (data) {
 				var doc = [];
-				data = JSON.parse(data);
 
 				for (var i = 0; i < data.length; i++){
                     var li = document.createElement('li');
@@ -251,7 +241,6 @@ $(".mark-set-color").click(function () {
 	});
 });
 
-
 $('[name="send-email-friend"]').click(function () {
     var info = $('#send-mail .info');
 	$.ajax({
@@ -262,7 +251,6 @@ $('[name="send-email-friend"]').click(function () {
 			email:$('#email-friend').val()
 		},
 		success:function (data) {
-			data = JSON.parse(data);
             info.removeClass('error success');
 
 			if(data.errors.trim().length > 0){
@@ -354,7 +342,6 @@ $('#order-date-end').datepicker({
 			},
 			success:function (data) {
                 $('.diagram-list').empty();
-				data = JSON.parse(data);
 				if(data.length > 0){
                     for (var i = 0; i < data.length; i++){
 						var block = createElement('div',{class:'diagram-item'});
@@ -387,11 +374,44 @@ $('#search-service').on('input',function () {
 			val:val
 		},
 		success:function(data){
-			data = JSON.parse(data);
 			$('.service-list').empty();
 			if(data.length > 0){
 				for (var i = 0; i < data.length; i++)
                     $('.service-list').append(createElement('li',{},data[i].title));
+			}
+		}
+	});
+});
+
+$('[name=parent-id]').click(function () {
+	var parent = $(this).val();
+	var textarea = $(this).siblings('[name=answer-text]');
+	var text = textarea.val();
+	var order = $(this).siblings('[name=order-id]').val();
+	var lastComment = $(this).closest('tbody').find('.order-executer').last();
+	if(!lastComment.length){
+        lastComment = $(this).closest('tbody').find('tr').first();
+	}
+	$.ajax({
+		method:'post',
+		url:wp_ajax.url,
+		data:{
+			action:'answer_comments',
+			parent:parent,
+			order:order,
+			text:text
+		},
+		success:function(data){
+			if(data.message.length > 0 && data.data){
+                textarea.val('');
+                var tr = createElement('tr',{'class':'order-executer'});
+                var td1 = createElement('td',null,data.data.user);
+                var td2 = createElement('td',null,data.data.comment);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                lastComment.after(tr);
+			}else{
+                alert(data.error);
 			}
 		}
 	});

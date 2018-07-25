@@ -1,6 +1,7 @@
 <?php
 global $order;
 $count_comments = isset($order->comments) && is_array($order->comments) ? sizeof($order->comments) : 0;
+
 ?>
 <td colspan="5">
 <div class="order-detailed">
@@ -60,24 +61,26 @@ $count_comments = isset($order->comments) && is_array($order->comments) ? sizeof
         </div>
         <button class="executer-answers-show" type="button">Ответов (<?=$count_comments?>)<span class="arrow"></span></button>
     </div>
-    <?php if($count_comments):?>
+
     <div class="order-detailed-answer">
         <div class="order-answer-table">
             <table>
-                <tr>
-                    <th>Код исполнителя</th>
-                    <th>Цена</th>
-                    <th>Условия исполнения</th>
-                    <th>Выбрать</th>
+                <tbody>
+                <tr class="header-order-executer">
+                    <th></th>
+                    <th>Комментарий</th>
+                    <!--<th>Вибрать</th>-->
                 </tr>
-                <?php foreach ($order->comments as $comment): ?>
-                <tr class="order-executer">
-                    <td><?=$comment->perfomer?></td>
-                    <td><?=$comment->price?></td>
-                    <td><?=$comment->comments?></td>
-                    <td><button class="button button-invert" type="button"><span>Выбрать</span></button></td>
-                </tr>
-                <tr class="order-executer-extend">
+                <?php if($count_comments):?>
+                    <?php foreach ($order->comments as $comment): ?>
+                        <tr class="order-executer">
+                            <td><?=$comment->display_name ?></td>
+                            <td><?=$comment->comment?></td>
+                            <!--<td><button class="button button-invert" type="button"><span>Выбрать</span></button></td>-->
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif;?>
+                <tr class="">
                     <td colspan="4">
                         <div class="order-executer-info">
                             <div class="order-executer-message">
@@ -87,76 +90,18 @@ $count_comments = isset($order->comments) && is_array($order->comments) ? sizeof
                                 <form>
                                     <div class="order-executer-form">
                                         <input type="text" placeholder="Написать сообщение" name="answer-text">
-                                        <button type="button" name="parent-id" class="button button-invert" value="<?=$comment->id?>"><span>Отправить</span></button>
+                                        <input type="hidden" name="order-id" value="<?= $order->id ?>">
+                                        <button type="button" name="parent-id" class="button button-invert" value=""><span>Отправить</span></button>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="order-executer-statistic">
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Рейтинг
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        10/100
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Количество сделок, в том числе безопасных
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        12/2
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Коэффициент доверия
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        30/10
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Отзывы других заказчиков
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        +10/-1
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Количество лет на рынке
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        5
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Количество завершенных проектов
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        3
-                                    </div>
-                                </div>
-                                <div class="executer-statistic-row">
-                                    <div class="executer-statistic-label">
-                                        Количество выигранных тендеров
-                                    </div>
-                                    <div class="executer-statistic-value">
-                                        11
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </td>
                 </tr>
-                <?php endforeach; ?>
+                </tbody>
             </table>
         </div>
     </div>
     <button class="order-detailed-close" type="button"></button>
-    <?php endif;?>
 </div>
 </td>

@@ -35,6 +35,9 @@ add_action('wp_ajax_nopriv_get_dates', 'bl_get_dates');
 add_action('wp_ajax_search_service', 'bl_search_service');
 add_action('wp_ajax_nopriv_search_service', 'bl_search_service');
 
+add_action('wp_ajax_answer_comments', 'bl_answer_comments');
+add_action('wp_ajax_nopriv_answer_comments', 'bl_answer_comments');
+
 function show_news_more(){
   $result = array();
   $news = get_posts(array(
@@ -53,8 +56,7 @@ function show_news_more(){
         'img' => get_the_post_thumbnail_url($new)
     );
   }
-  echo json_encode($result);
-  die;
+  renderJSON($result);
 }
 
 function sign_on_from_google(){
@@ -138,24 +140,22 @@ function delete_bl_order_reminder(){
 function bl_update_notification(){
     if(!isset($_POST['type'],$_POST['id']))
         die;
-
     if($_POST['type'] == 'reminder'){
         BLReminder::updateReminderView($_POST['id']);
     }
     if($_POST['type'] == 'order'){
         BLNotification::updateNotification($_POST['id']);
     }
-        $res['count'] = bl_user_notification($_POST['user_id']);
-        $res['nots'] = bl_get_template_notification();
-        echo json_encode($res);
-        die;
+    $res['count'] = bl_user_notification($_POST['user_id']);
+    $res['nots'] = bl_get_template_notification();
 
+    renderJSON($res);
 }
 
 function bl_service_autocomplete(){
     if(isset($_POST['s'])){
         $services = BLService::searchServices($_POST['s']);
-        echo json_encode($services);
+        renderJSON($services);
     }
     die;
 }
@@ -170,23 +170,14 @@ function bl_add_friend(){
     if(isset($_POST['email'])){
         $friend = new BLFriend;
         $friend->email = $_POST['email'];
-
-        if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
-            echo json_encode(array('errors' => 'Некорректный email!','message' => ''));
-            die;
-        }
-        if(email_exists($_POST['email']) || $friend->isExist()){
-            echo json_encode(array('errors' => 'Пользователь с таким email уже существует!','message' => ''));
-            die;
-        }
-
-        if($message = $friend->insert()){
-            echo json_encode(array('message' => 'Спасибо! Письмо успешно отправлено!','errors' => ''));
-            die;
-        }else{
-            echo json_encode(array('message' => '','errors' => 'Не получилось отправить письмо! Попробуйте позднее!'));
-            die;
-        }
+        if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL))
+            renderJSON(array('errors' => 'Некорректный email!','message' => ''));
+        if(email_exists($_POST['email']) || $friend->isExist())
+            renderJSON(array('errors' => 'Пользователь с таким email уже существует!','message' => ''));
+        if($message = $friend->insert())
+            renderJSON(array('message' => 'Спасибо! Письмо успешно отправлено!','errors' => ''));
+        else
+            renderJSON(array('message' => '','errors' => 'Не получилось отправить письмо! Попробуйте позднее!'));
     }
     die;
 }
@@ -196,19 +187,19 @@ function bl_get_dates(){
         $employs = BLEmployment::init();
         $employs->getAvailByDate(date('Y-m-d',strtotime(str_replace('/','-',$_POST['date']))),date('Y-m-d',strtotime(str_replace('/','-',$_POST['date'])) + 3600 * 24 * 10),10);
         $step = $employs->step();
+        $step = $step ? $step : 1;
         $res = array();
         if(is_array($employs->data)){
             foreach ($employs->data as $employ){
                 $res[] = array(
-                    'date' => date_i18n('d F',strtotime($employ->date)),
+                    'date' => $employ->date,
                     'class' => $employs->getTypeClass($employ->avail),
                     'height' => round($employ->cost/$step,0),
                     'cost' => round($employ->cost,0)
                 );
             }
         }
-
-        echo json_encode($res);
+        renderJSON($res);
     }
     die;
 }
@@ -216,7 +207,7 @@ function bl_get_dates(){
 function bl_get_list(){
     if(isset($_POST['id'])){
         $list = BLService::getDocumentsById($_POST['id']);
-        echo wp_json_encode($list);
+        renderJSON($list);
     }
     die;
 }
@@ -224,7 +215,23 @@ function bl_get_list(){
 function bl_search_service(){
     if(isset($_POST['val'])){
         $res = BLService::searchServices($_POST['val']);
-        echo wp_json_encode($res);
+        renderJSON($res);
     }
     die;
+}
+
+function bl_answer_comments(){
+    if($_SERVER['REQUEST_METHOD'] == "POST" && !empty($_POST['text'])){
+        $comment = new BLComments();
+        $comment->comment = $_POST['text'];
+        $comment->order_id = $_POST['order'];
+        $user = wp_get_current_user();
+        if($comment->save()){
+            renderJSON(array('message' => 'Коментар отправлен!','error' => '','data' => array(
+                'comment' => $comment->comment,
+                'user' => ($user->ID) ? $user->display_name : 'Не известен',
+            )));
+        }
+        renderJSON(array('message' => '','error' => 'Не удалось отправить коментар!', 'data' => false));
+    }
 }

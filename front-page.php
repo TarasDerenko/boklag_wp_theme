@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="showcase-content">
                     <h1 class="showcase-title"><?php the_field('top_content')?></h1>
-                    <a href="<?php the_field('top_button_url')?>" class="button"><span><?php the_field('tom_button_text')?></span></a>
+                    <a href="<?php the_field('top_button_url',$post)?>" class="button"><span><?php the_field('tom_button_text',$post)?></span></a>
                 </div>
             </div>
         </section>

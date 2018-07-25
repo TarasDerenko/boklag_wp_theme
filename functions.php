@@ -39,19 +39,18 @@ function update_boklag_user_data($id,array $args){
 
 
 add_action('init', 'dcc_rewrite_tags');
-function dcc_rewrite_tags() {
+function dcc_rewrite_tags(){
     add_rewrite_tag('%orders_page%', '([^&]+)');
 }
 
 add_action('init', 'dcc_rewrite_rules');
-function dcc_rewrite_rules() {
+function dcc_rewrite_rules(){
     add_rewrite_rule('^orders/(.+)/?','index.php?page_id=121&orders_page=$matches[1]','top');
 }
 
 add_filter( 'template_include', 'my_callback' );
-function my_callback( $original_template ) {
+function my_callback( $original_template ){
     $query_var = get_query_var( 'orders_page' );
-
     if ( !empty($query_var) ){
         $query = explode('/',$query_var);
         $path = __DIR__ . '/order_parts/'.$query[0].'.php';
@@ -65,7 +64,6 @@ function my_callback( $original_template ) {
 }
 
 function bl_active($par1,$par2,$class =''){
-    var_dump($par1);
     if(in_array($par2,explode('/',$par1)))
         echo 'class="active '.$class.'"';
     else
@@ -75,11 +73,9 @@ function bl_active($par1,$par2,$class =''){
 function my_handle_attachment($file_handler,$post_id) {
     // check to make sure its a successful upload
     if ($_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK) __return_false();
-
     require_once(ABSPATH . "wp-admin" . '/includes/image.php');
     require_once(ABSPATH . "wp-admin" . '/includes/file.php');
     require_once(ABSPATH . "wp-admin" . '/includes/media.php');
-
     $attach_id = media_handle_upload( $file_handler, $post_id );
     return $attach_id;
 }
@@ -130,4 +126,9 @@ function get_reminder_bell(){
     $content = ob_get_contents();
     ob_end_clean();
     return $content;
+}
+
+function renderJSON(array $data){
+    header('Content-type: application/json');
+    wp_die(wp_json_encode($data));
 }

@@ -24,6 +24,8 @@ class BLEmployment
 
     public function getAvailByDate($from,$to,$limit = null){
         global $wpdb;
+
+
         $query = $wpdb->prepare("
             SELECT * 
             FROM {$wpdb->prefix}bl_employment
@@ -32,21 +34,46 @@ class BLEmployment
         if($limit){
             $query .= " LIMIT $limit";
         }
-       $this->data = $wpdb->get_results($query);
-       return $this;
+
+        $data = $wpdb->get_results($query);
+
+
+        $result = array();
+        $diff = array();
+
+        foreach ($data as $emp){
+            $diff[date('d',strtotime($emp->date))] = $emp;
+        }
+
+        foreach (array_fill(0,$limit,$from) as $day => $date){
+            $currentDate = date('d',strtotime($date."+$day days"));
+            if(isset($diff[$currentDate])){
+                $result[] = (object)array(
+                    'avail' => $diff[$currentDate]->avail,
+                    'cost' => $diff[$currentDate]->cost,
+                    'date' => date_i18n('d F',strtotime($date."+$day days")),
+                );
+            }else{
+                $result[] = (object)array(
+                    'avail' => 1,
+                    'cost' => 0,
+                    'date' => date_i18n('d F',strtotime($date."+$day days")),
+                );
+            }
+        }
+        $this->data = $result;
+        return $this;
     }
 
     public function getMin(){
         if(is_array($this->data)){
            return array_reduce($this->data, function ($carry,$item){
-               if($carry == null)
-                   $carry = $item->cost;
-
-               if($carry < $item->cost){
+               if($carry === null)
+                   $carry = 0;
+               if($carry < $item->cost)
                    return $carry;
-               }else{
+               else
                    return $item->cost;
-               }
            });
         }
         return 0;
@@ -55,11 +82,10 @@ class BLEmployment
     public function getMax(){
         if(is_array($this->data)){
             return array_reduce($this->data, function ($carry,$item){
-                if($carry > $item->cost){
+                if($carry > $item->cost)
                     return $carry;
-                }else{
+                else
                     return $item->cost;
-                }
             });
         }
         return 0;
@@ -69,10 +95,11 @@ class BLEmployment
         return ($this->getMax() - $this->getMin()) * 0.01;
     }
 
-    public function getTypeClass($key){
+    public function getTypeClass($key = null){
         $classes = array("","blue","red");
-        if(array_key_exists($key,$classes))
+        if($key && array_key_exists($key,$classes))
             return $classes[$key];
         return '';
     }
+
 }

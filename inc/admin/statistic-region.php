@@ -8,7 +8,7 @@ function add_region_statistics(){
 //            update_option($key,$value);
 //        }
 //    }
-    $query = 'SELECT region,COUNT(*) AS count FROM `{$wpdb->prefix}bl_region_statistics` GROUP BY region';
+    $query = 'SELECT region,COUNT(*) AS count FROM `wp_bl_region_statistics` GROUP BY region';
     $regions = $wpdb->get_results($query);
     ?>
     <div class="wrap">

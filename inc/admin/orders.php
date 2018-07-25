@@ -1,7 +1,7 @@
 <?php
 $paged = isset($_GET['paged']) ? $_GET['paged'] : 1 ;
 
-do_action('start_orders',null,null,$paged,20); global $bl_orders; ?>
+do_action('start_orders',null,null,$paged,20,false); global $bl_orders;?>
 <style>
     .pagination span, .pagination a{
         display: block;
@@ -22,6 +22,7 @@ do_action('start_orders',null,null,$paged,20); global $bl_orders; ?>
                     <th>Стадии</th>
                     <th>Адрес объекта</th>
                     <th>Дата окончания<br> работ</th>
+                    <th>Коментарии</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -33,6 +34,7 @@ do_action('start_orders',null,null,$paged,20); global $bl_orders; ?>
                         <td><?php echo BLOrder::get_status($order->status);?></td>
                         <td><?php echo $order->street.' '.$order->house;?></td>
                         <td><?php echo $order->date_end;?></td>
+                        <td><?= count($order->comments) ;?></td>
                         <td><a href="/wp-admin/admin.php?page=boklag-orders&id=<?= $order->id ?>">Посмотреть</a></td>
                     </tr>
                 <?php endforeach;?>
@@ -43,4 +45,3 @@ do_action('start_orders',null,null,$paged,20); global $bl_orders; ?>
     <div class="order-pagination"><?php echo BLOrder::pagination();?></div>
 </div>
 <?php do_action('end_orders')?>
-<?php

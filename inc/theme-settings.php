@@ -18,8 +18,8 @@ add_filter('get_the_archive_title', function( $title ){
 });
 /*********************************************************/
 if ( !current_user_can( 'manage_options' ) ) {
+    show_admin_bar(false);
 }
-   show_admin_bar(false);
 /*********************************************************/
 add_theme_support( 'custom-logo' );
 /*********************************************************/
